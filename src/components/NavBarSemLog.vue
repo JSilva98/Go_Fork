@@ -3,7 +3,8 @@
     <v-toolbar color="#0b5aa8" dark>
       <v-toolbar-title>
         <router-link :to="{name: 'home'}" tag="button">
-          <v-img src="../assets/logo.png" class="img" contain max-height= "90"></v-img>
+          Go Fork
+           <v-img src="../assets/logoV2.png" class="img" contain max-height="60"></v-img>
         </router-link>
       </v-toolbar-title>
 
