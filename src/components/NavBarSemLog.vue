@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar color="orange darken-1" dark>
+    <v-toolbar color="#0b5aa8" dark>
       <v-toolbar-title>
         <router-link :to="{name: 'home'}" tag="button">
           <v-img src="../assets/logo.png" class="img" contain max-height= "90"></v-img>

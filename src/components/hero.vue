@@ -8,7 +8,7 @@
           <h1 class="display-2 mb-4">Personalize o seu serviço</h1>
           <h4 class="font-weight-thin display-1">Serviços externos ESHT a sua disposição</h4>
           <router-link :to="{name: 'novo-pedido'}" tag="button">
-            <v-btn class="mt-10" style="background-color:#457BF2" dark large> Novo Pedido</v-btn>
+            <v-btn class="mt-10" style="background-color:#F24B44" dark large> Novo Pedido</v-btn>
           </router-link>
         </v-col>
       </v-row>

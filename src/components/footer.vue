@@ -1,5 +1,5 @@
 <template>
-  <v-footer dark padless class="footer orange darken-3 white--text text-center">
+  <v-footer dark padless color="#0b5aa8" class="footer darken-3 white--text text-center">
     <div class="container">
       <div class="row">
         <div class="col-4">
