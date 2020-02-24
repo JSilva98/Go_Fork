@@ -143,7 +143,7 @@ export default {
 
 <style>
 body {
-  font-family: Arial;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
   background-color: white;
 }
 </style>

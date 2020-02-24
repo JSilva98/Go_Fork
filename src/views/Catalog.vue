@@ -2,7 +2,8 @@
   <div>
     <NavbarSemLog />
     <div>
-      <h1 class="center">Serviços</h1>
+      <h2><span>Serviços</span></h2>
+      <p class="center">Nesta página encontram-se uma variedade de serviços e menus que poderão ser usufruídos pelos nossos clientes.</p>
      <br>
           <v-row justify="space-between">
             <v-col v-for="service in services" v-bind:key="service.id" md="3" class="ma-5">
@@ -45,6 +46,19 @@ footer {
 .center {
   margin-top: 25px;
   text-align: center;
+}
+
+h2 {
+   width: 100%; 
+   text-align: center; 
+   border-bottom: 1px solid #000; 
+   line-height: 0.1em;
+   margin-top: 25px; 
+} 
+
+h2 span { 
+    background:#fafafa; 
+    padding:0 10px; 
 }
 </style>
 

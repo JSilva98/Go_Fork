@@ -2,21 +2,12 @@
   <div>
     <NavbarSemLog />
     <br />
-    <!-- <v-toolbar flat dense min-width="100" color="transparent">
-      <v-row class="justify-center">
-        <v-col v-for="menu in menus" v-bind:key="menu.id" md="auto">
-          <v-row class="justify-center"  >
-            <v-btn class="text-left" text color="primary" :href="menu.id">{{menu.name}}</v-btn>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-toolbar>-->
-    <v-tabs v-model="tabs" centered background-color="transparent">
+    <v-tabs v-model="tabs" centered background-color="transparent" color="#F24B44">
       <v-tab v-for="menu in menus" v-bind:key="menu.namee">{{menu.name}}</v-tab>
     </v-tabs>
 
-    <v-tabs-items v-model="tabs" background-color="transparent">
-      <v-tab-item fluid v-for="menu in menus" v-bind:key="menu.name" background-color="transparent">
+    <v-tabs-items v-model="tabs"  >
+      <v-tab-item fluid v-for="menu in menus" v-bind:key="menu.name" background-color="transparent" >
         <v-container fill-height>
           <v-layout align-center>
             <v-flex>

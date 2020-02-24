@@ -6,29 +6,29 @@
     <br />
     <v-stepper v-model="e1">
       <v-stepper-header>
-        <v-stepper-step :complete="e1 > 1" step="1" @click="e1 = 1">
+        <v-stepper-step :complete="e1 > 1" step="1" @click="e1 = 1" color="#F24B44">
           <v-btn text>Tipo de Serviço</v-btn>
         </v-stepper-step>
 
         <v-divider></v-divider>
 
-        <v-stepper-step :complete="e1 > 2" step="2" @click="e1 = 2">
+        <v-stepper-step :complete="e1 > 2" step="2" @click="e1 = 2" color="#F24B44">
           <v-btn text>Menu</v-btn>
         </v-stepper-step>
 
         <v-divider></v-divider>
 
-        <v-stepper-step :complete="e1 > 3" step="3" @click="e1 = 3">
+        <v-stepper-step :complete="e1 > 3" step="3" @click="e1 = 3" color="#F24B44">
           <v-btn text>Data e hora</v-btn>
         </v-stepper-step>
         <v-divider></v-divider>
 
-        <v-stepper-step :complete="e1 > 4" step="4" @click="e1 = 4">
+        <v-stepper-step :complete="e1 > 4" step="4" @click="e1 = 4" color="#F24B44">
           <v-btn text>Vestuário</v-btn>
         </v-stepper-step>
         <v-divider></v-divider>
 
-        <v-stepper-step :complete="e1 > 4" step="5" @click="e1 = 5">
+        <v-stepper-step :complete="e1 > 4" step="5" @click="e1 = 5" color="#F24B44">
           <v-btn text>Local</v-btn>
         </v-stepper-step>
         <v-divider></v-divider>
@@ -39,7 +39,7 @@
       </v-stepper-header>
 
       <v-stepper-items>
-        <v-stepper-content step="1">
+        <v-stepper-content  step="1">
           <h4 class="center">Que tipo de serviço deseja?</h4>
           <h5
             class="center"
