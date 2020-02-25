@@ -16,6 +16,7 @@ import CatalogBackOffice from "@/views/BackOffice/CatalogManager.vue"
 import MenusBackOffice from "@/views/BackOffice/Menus.vue"
 import ErrorPage from "@/views/ErrorPage.vue";
 import ErrorPageUserInvalid from "@/views/ErrorPageLoggedUser.vue"
+import AdminMainPage from "@/views/BackOffice/AdminMainPage.vue"
 //import LogIn from "@/components/buttonModalLogin.vue"
 import store from "../store";
 
@@ -67,6 +68,18 @@ const routes = [
       }
     }
   },
+  {
+    path: "/adminMainPage",
+    name: "adminMainPage",
+    component: AdminMainPage,
+    beforeEnter: (to, from, next) => {
+      if(store.state.loggedUser.id== 0){
+        next()
+      }else{
+        next("/errorPageInvalidUser");
+      }
+    }
+   },
   {
    path: "/userbackoffices",
    name: "user-backoffice",

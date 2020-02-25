@@ -1,7 +1,7 @@
 <template>
   <div>
     <NavbarSemLog />
-    <h1 class="center">Perfil</h1>
+    <h2><span>Perfil</span></h2>
     <v-container fluid>
       <br />
       <v-layout column>
@@ -26,7 +26,7 @@
               </v-flex>
             </v-row>
             <br />
-            <h2 class="center">Bem-vindo {{this.loggedUser.username}}</h2>
+            <h1 class="center">Bem-vindo {{this.loggedUser.username}}</h1>
             <br />
             <br />
             <v-row>
@@ -87,7 +87,7 @@
     <br />
     <br />
     <v-row class="justify-center">
-      <h1>Conquistas</h1>
+      <h2><span>Conquistas</span></h2>
     </v-row>
     <br />
     <br />
@@ -120,7 +120,7 @@
     <br />
     <br />
     <v-row class="justify-center">
-      <h1>Recompensas</h1>
+      <h2><span>Recompensas</span></h2>
       <br />
       <br />
     </v-row>
@@ -170,6 +170,19 @@
   margin-left: auto;
   margin-right: auto;
   width: 50%;
+}
+
+h2 {
+   width: 100%; 
+   text-align: center; 
+   border-bottom: 1px solid #000; 
+   line-height: 0.1em;
+   margin-top: 25px; 
+} 
+
+h2 span { 
+    background:#fafafa; 
+    padding:0 10px; 
 }
 </style>
 

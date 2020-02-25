@@ -1,8 +1,14 @@
 <template>
   <div class="about">
     <NavbarSemLog />
-    <div class="Div">
-      <h1 style="color:darkorange">Gestão de Utilizadores</h1>
+    <div><router-link :to="{name:'adminMainPage'}" tag="button">
+          <v-btn class="cBtn" dark small color="#0b5aa8"> <v-icon dark>mdi-arrow-left-bold-circle-outline</v-icon></v-btn>
+        </router-link></div>
+    <div>
+       <h2>
+        <span>Gestão de Utilizadores</span>
+      </h2>
+       <p class="center">Nesta página poderá gerir todos utilizadores existentes na plataforma, tal como tornar um utilizador em administrador e vice-versa.</p>
     </div>
     <div class="filterDiv">
         <div class="form-inline padding">
@@ -72,7 +78,7 @@ tr:nth-child(even) {
 }
 
 th {
-  background-color: darkorange;
+  background-color: #F24B44;
   color: white;
 }
 
@@ -80,11 +86,6 @@ th {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.Div {
-  color: white;
-  text-align: center;
 }
 
 .padding {
@@ -98,6 +99,31 @@ th {
 
 .marginBtn {
   margin-left: 20px;
+}
+
+.center {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.cBtn {
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  text-align: center;
+}
+
+h2 {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #000;
+  line-height: 0.1em;
+  margin-top: 25px;
+}
+
+h2 span {
+  background: #fafafa;
+  padding: 0 10px;
 }
 
 Footer{

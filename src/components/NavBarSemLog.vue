@@ -80,29 +80,8 @@
             </v-list-item>
             <v-list-item v-if="getLoggedUser().type==1">
               <v-list-item-title>
-                <router-link :to="{name:'user-backoffice'}" tag="button">
-                  <v-btn text>Gestão de Users</v-btn>
-                </router-link>
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item v-if="(getLoggedUser().type==1||getLoggedUser().type==2)">
-              <v-list-item-title>
-                <router-link :to="{name:'request-backoffice'}" tag="button">
-                  <v-btn text>Gestão de Pedidos</v-btn>
-                </router-link>
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item v-if="(getLoggedUser().type==1||getLoggedUser().type==2)">
-              <v-list-item-title>
-                <router-link :to="{name:'catalog-backoffice'}" tag="button">
-                  <v-btn text>Gestão de Serviços</v-btn>
-                </router-link>
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item v-if="(getLoggedUser().type==1||getLoggedUser().type==2)">
-              <v-list-item-title>
-                <router-link :to="{name:'menus-backoffice'}" tag="button">
-                  <v-btn text>Gestão de Menus</v-btn>
+                <router-link :to="{name:'adminMainPage'}" tag="button">
+                  <v-btn text>Admin Dashboard</v-btn>
                 </router-link>
               </v-list-item-title>
             </v-list-item>

@@ -2,9 +2,10 @@
   <div class="about">
     <NavbarSemLog />
     <div class="Div">
-      <h1 style="color:darkorange">Meus Pedidos</h1>
+      <h2><span>Meus Pedidos</span></h2>
+       <p class="center">Nesta página poderá verificar o estado dos seus pedidos efetuados.</p>
     </div>
-
+<br>
     <table>
       <tr>
         <th>ID do Pedido</th>
@@ -113,7 +114,7 @@ tr:nth-child(even) {
 }
 
 th {
-  background-color: darkorange;
+  background-color: #F24B44;
   color: white;
 }
 
@@ -123,10 +124,7 @@ th {
   justify-content: center;
 }
 
-.Div {
-  color: white;
-  text-align: center;
-}
+
 
 .padding {
   padding-left: 5%;
@@ -148,6 +146,24 @@ footer {
   left: 0px;
   right: 0px;
   margin-bottom: 0px;
+}
+
+.center {
+  margin-top: 25px;
+  text-align: center;
+}
+
+h2 {
+   width: 100%; 
+   text-align: center; 
+   border-bottom: 1px solid #000; 
+   line-height: 0.1em;
+   margin-top: 25px; 
+} 
+
+h2 span { 
+    background:#fafafa; 
+    padding:0 10px; 
 }
 </style>
 

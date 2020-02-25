@@ -1,7 +1,8 @@
 <template>
   <div class="about">
     <NavbarSemLog />
-    <h1 class="center">Galeria</h1>
+    <h2><span>Galeria</span></h2>
+     <p class="center">Gostamos de partilhar convosco todos os eventos de catering que já realizamos.</p>
     <v-carousel
       cycle
       height="460"
@@ -19,7 +20,8 @@
     </v-carousel>
     <br />
     <div>
-      <h3 class="center">Avaliações</h3>
+      <h2><span>Avaliações</span></h2>
+       <p class="center">Os nossos clientes têm possibilidade de avaliar e comentar o serviço prestado.</p>
     </div>
     <v-row class="justify-center">
       <v-col v-for="review in reviews" :key="review.id" md="3" class="ma-5">
@@ -51,6 +53,19 @@
 .center {
   margin-top: 25px;
   text-align: center;
+}
+
+h2 {
+   width: 100%; 
+   text-align: center; 
+   border-bottom: 1px solid #000; 
+   line-height: 0.1em;
+   margin-top: 25px; 
+} 
+
+h2 span { 
+    background:#fafafa; 
+    padding:0 10px; 
 }
 </style>
 
