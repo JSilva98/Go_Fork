@@ -23,7 +23,7 @@
        
  
      <v-card class="elevation-12" >
-      <v-toolbar color="orange darken-1" dark>
+      <v-toolbar color="#0b5aa8" dark>
         <v-toolbar-title>Login</v-toolbar-title>
         <v-spacer></v-spacer>
       </v-toolbar>
