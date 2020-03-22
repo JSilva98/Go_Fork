@@ -1,10 +1,16 @@
 <template>
   <v-content>
     <NavbarSemLog />
-    <div class="Div">
-      <h1 style="color:darkorange">Gestão de Menus</h1>
+    <div><router-link :to="{name:'adminMainPage'}" tag="button">
+          <v-btn class="cBtn" dark small color="#0b5aa8"> <v-icon dark>mdi-arrow-left-bold-circle-outline</v-icon></v-btn>
+        </router-link>
     </div>
     <div>
+       <h2>
+        <span>Gestão de Menus</span>
+      </h2>
+       <p class="center">Nesta página poderá gerir todos menus disponiveis na nossa aplicação. Lembre-se que só pode adicionar menus a serviços já existentes.</p>
+    </div>
       <v-dialog v-model="dialog" persistent max-width="600px">
         <template v-slot:activator="{ on }">
           <div class="btnPos">
@@ -54,7 +60,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </div>
+    
     <br />
     <table>
       <tr>
@@ -69,9 +75,9 @@
       <tr v-for="menu in menus" :key="menu.id">
         <td>{{ menu.id }}</td>
         <td>{{ menu.name }}</td>
-        <td>{{ menu.imgLink }}</td>
-        <td>{{ menu.food }}</td>
-        <td>{{ menu.drink }}</td>
+        <td><v-btn small @click="openPhoto(menu.id)" color="lightblue">Mostrar Link</v-btn></td>
+        <td>{{ menu.food.toString() }}</td>
+        <td>{{ menu.drink.toString() }}</td>
         <td>{{ menu.idServico }}</td>
         <td>
           <v-btn small @click="removeService(menu.id)" color="error">Remover</v-btn>
@@ -101,7 +107,7 @@ tr:nth-child(even) {
 }
 
 th {
-  background-color: darkorange;
+  background-color: #F24B44;
   color: white;
 }
 
@@ -129,6 +135,30 @@ th {
   justify-content: center;
 }
 
+.cBtn {
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  text-align: center;
+}
+
+h2 {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #000;
+  line-height: 0.1em;
+  margin-top: 25px;
+}
+
+h2 span {
+  background: #fafafa;
+  padding: 0 10px;
+}
+
+.center {
+  margin-top: 25px;
+  text-align: center;
+}
 
 </style>
 
@@ -164,6 +194,15 @@ export default {
         food: this.food.split(','),
         drink: this.drink.split(','),
       });
+    },
+
+    openPhoto(id) {
+      for (let i = 0; i < this.menus.length; i++) {
+              if (this.menus[i].id == id) {
+               Swal.fire(this.menus[i].imgLink)
+              }
+            }
+      
     },
 
     removeService(id) {

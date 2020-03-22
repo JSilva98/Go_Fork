@@ -1,9 +1,17 @@
 <template>
   <v-content>
     <NavbarSemLog />
-    <div class="Div">
-      <h1 style="color:darkorange">Gestão de Serviços</h1>
+    <div><router-link :to="{name:'adminMainPage'}" tag="button">
+          <v-btn class="cBtn" dark small color="#0b5aa8"> <v-icon dark>mdi-arrow-left-bold-circle-outline</v-icon></v-btn>
+        </router-link>
     </div>
+    <div>
+       <h2>
+        <span>Gestão de Serviços</span>
+      </h2>
+       <p class="center">Nesta página poderá gerir todos serviços disponiveis na nossa aplicação.</p>
+    </div>
+    
     <div>
       <v-dialog v-model="dialog" persistent max-width="600px">
         <template v-slot:activator="{ on }">
@@ -47,7 +55,7 @@
       <tr v-for="service in services" :key="service.id">
         <td>{{ service.id }}</td>
         <td>{{ service.name }}</td>
-        <td>{{ service.imgLink }}</td>
+       <td><v-btn small @click="openPhoto(service.id)" color="lightblue">Mostrar Link</v-btn></td>
         <td>
           <v-btn small @click="removeService(service.id)" color="error">Remover</v-btn>
         </td>
@@ -75,7 +83,7 @@ tr:nth-child(even) {
 }
 
 th {
-  background-color: darkorange;
+  background-color: #F24B44;
   color: white;
 }
 
@@ -101,6 +109,31 @@ th {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.cBtn {
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  text-align: center;
+}
+
+h2 {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #000;
+  line-height: 0.1em;
+  margin-top: 25px;
+}
+
+h2 span {
+  background: #fafafa;
+  padding: 0 10px;
+}
+
+.center {
+  margin-top: 25px;
+  text-align: center;
 }
 
 Footer {
@@ -139,6 +172,15 @@ export default {
         name: this.name,
         imgLink: this.imgLink
       });
+    },
+
+    openPhoto(id) {
+      for (let i = 0; i < this.services.length; i++) {
+              if (this.services[i].id == id) {
+               Swal.fire(this.services[i].imgLink)
+              }
+            }
+      
     },
 
     removeService(id) {

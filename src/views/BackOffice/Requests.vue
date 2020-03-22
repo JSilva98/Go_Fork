@@ -1,22 +1,31 @@
 <template>
   <div>
     <NavbarSemLog />
-    <div class="filterDiv">
-      <h1 style="color:darkorange">Gestão de Pedidos</h1>
+    <div><router-link :to="{name:'adminMainPage'}" tag="button">
+          <v-btn class="cBtn" dark small color="#0b5aa8"> <v-icon dark>mdi-arrow-left-bold-circle-outline</v-icon></v-btn>
+        </router-link>
     </div>
+    <div>
+       <h2>
+        <span>Gestão de Pedidos</span>
+      </h2>
+       <p class="center">Nesta página poderá gerir todos pedidos efetuados pelos nossos utilizadores.</p>
+    </div>
+    
     <v-container class="my-5">
       <v-layout row wrap>
         <v-flex xs12 sm6 md4 lg3 v-for="request in requests" :key="request.id">
-          <v-card class="text-center ma-3 orange padding">
+          <v-card class="ma-3  padding" outlined>
             <v-list-item-content>
               <div class="overline">{{request.id}}</div>
               <v-list-item-title class="headline mb-1">{{request.serviceName}}</v-list-item-title>
               <v-list-item-subtitle>{{request.menuName}}</v-list-item-subtitle> 
-             <v-list-item-subtitle>{{request.date}}</v-list-item-subtitle> 
-              <v-list-item-subtitle>{{request.time}}</v-list-item-subtitle> 
+             <v-list-item-subtitle>Data: {{request.date}}</v-list-item-subtitle> 
+              <v-list-item-subtitle>Hora: {{request.time}}</v-list-item-subtitle> 
               <v-list-item-subtitle>Extras: {{request.extras}}</v-list-item-subtitle>
             </v-list-item-content>
             <v-card-text>
+              Informação do Cliente:
               <div class="subheading">Utilizador: {{request.userName}}</div>
               <div class="subheading" v-if="requests.local !== '' ">Local: {{request.local}}</div>
             </v-card-text>
@@ -79,6 +88,30 @@ template {
   margin-left: 20px;
 }
 
+.cBtn {
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  text-align: center;
+}
+
+h2 {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #000;
+  line-height: 0.1em;
+  margin-top: 25px;
+}
+
+h2 span {
+  background: #fafafa;
+  padding: 0 10px;
+}
+
+.center {
+  margin-top: 25px;
+  text-align: center;
+}
 </style>
 
 

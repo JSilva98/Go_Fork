@@ -12,7 +12,25 @@
       <v-col cols="3">
         <router-link :to="{name:'user-backoffice'}" tag="button">
           <v-btn class="cBtn" dark large color="#F24B44"> <v-icon dark>mdi-account-box-outline</v-icon>Gestão de Utilizadores</v-btn>
-        </router-link>
+        </router-link> 
+        <!-- <v-hover v-slot:default="{ hover }">
+                <v-card color="grey lighten-4" height="100 px" outlined flat>
+                  
+                  <v-img max-height="100" max-width="100" src="@/assets/userManagment.png">
+                  <router-link
+                    :to="{name:'user-backoffice'}"
+                    tag="button"
+                    :class="{ btn: true, 'btn-danger': true, 'btn-sm': true }"
+                  >
+                    <div
+                      v-if="hover"
+                      class="d-flex transition-fast-in-fast-out orange darken-2 v-card--reveal display-1 white--text"
+                      style="height: 100%;"
+                    >Gestão de Utilizadores</div>
+                    </router-link>
+                  </v-img>
+                </v-card>
+              </v-hover> -->
       </v-col>
       <v-col cols="3">
           <router-link :to="{name:'request-backoffice'}" tag="button">
