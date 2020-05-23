@@ -4,7 +4,7 @@ async function get(req, res){
     const requests = req.query
 
     try{
-        if(clothing.id) {
+        if(requests.id) {
             return res.send(await Requests.find({_id: requests.id}))
         } else {
             return res.send(await Requests.find())
