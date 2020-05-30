@@ -6,7 +6,8 @@ const uri = `mongodb+srv://joao:joao123@cluster0-8pjjz.mongodb.net/test?retryWri
 mongoose.connect(uri, {
     useNewUrlParser: true,
     useFindAndModify: false,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useUnifiedTopology: true 
 })
 
 mongoose.Promise = global.Promise
