@@ -24,7 +24,7 @@
     </div>
     <table>
       <tr>
-        <th>ID do Utilizador</th>
+       <!--  <th>ID do Utilizador</th> -->
         <th>Username</th>
         <th>Email</th>
         <th>Password</th>
@@ -32,7 +32,7 @@
         <th>Ações</th>
       </tr>
       <tr v-for="user in filteredUsers" :key="user.id">
-        <td>{{ user.id }}</td>
+        <!-- <td>{{ user.id }}</td> -->
         <td>{{ user.username }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.password }}</td>
@@ -140,6 +140,7 @@ Footer{
 import NavbarSemLog from "@/components/NavBarSemLog.vue";
 import Footer from "@/components/footer.vue";
 import Swal from "sweetalert2";
+import axios from "axios";
 export default {
   components: {
     NavbarSemLog,
@@ -147,13 +148,28 @@ export default {
   },
   data: function() {
     return {
-      filteredUsers: this.$store.state.users,
-      users: this.$store.state.users,
+      filteredUsers: null,
+      users: null,
       nameFilter: "",
       
       username: ""
     };
   },
+
+  created() {
+    axios
+      .get("http://localhost:3000/users")
+      .then(res => {
+        this.users = res.data;
+        this.filteredUsers = res.data;
+        console.log("users:");
+        console.log(this.users);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  },
+
   methods: {
     removeUser(id) {
       const swalButtons = Swal.mixin({
