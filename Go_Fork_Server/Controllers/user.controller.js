@@ -22,7 +22,53 @@ async function register(req, res) {
         email: req.body.email,
         username: req.body.username,
         password: req.body.password,
-        foto: "https://i.imgur.com/6NIOn6z.jpg",
+        foto: "https://i.imgur.com/6NIOn6z.jpg", 
+        rewards:{
+            requestServiceForFree: false,
+            get20EurosCupon: false,
+         acheivements: [
+            {
+              id: 0,
+              tittle: "Primeiro Pedido",
+              desc: "Faça o seu primeiro pedido para receber 5 pontos!",
+              points: 5,
+              available: true,
+              progress: 0,
+            },
+            {
+              id: 1,
+              tittle: "Primeiro Pagamento",
+              desc: "Faça o seu primeiro pagamento para receber 5 pontos!",
+              points: 5,
+              available: true,
+              progress: 0,
+            },
+            {
+              id: 2,
+              tittle: "Primeira review",
+              desc: "Faça o seu primeiro pedido para receber 5 pontos!",
+              points: 5,
+              available: true,
+              progress: 0,
+            },
+            {
+              id: 3,
+              tittle: "Fazer 10 pagamentos",
+              desc: "Faça 10 pagamentos para receber 50 pontos!",
+              points: 50,
+              available: true,
+              progress: 0,
+            },
+            {
+              id: 4,
+              tittle: "Fazer 10 reviews",
+              desc: "Faça o seu primeiro pedido para receber 35‬ pontos!",
+              points: 35,
+              available: true,
+              progress: 0,
+            }
+          ], 
+        },
         type: 3
     })
     newUser.save((error) => {
@@ -39,33 +85,40 @@ async function register(req, res) {
 
 async function validate(req, res) {
     try {
-        const { email, password } = req.body
-        console.log(req.body.email)
-        console.log("entrou")
-
-        const user = await User.findOne({ email: email }).lean()
-
+        const { username, password } = req.body
+        const user = await User.findOne({ username: username }).lean()
         if (!user) {
             console.log("user not found")
             return res.status(403).send({ error: "User not found" })
         }
 
-        const passwordValid = await bcrypt.compare(password, user.password)
-        
-        if (!passwordValid) {
+        //const passwordValid = await bcrypt.compare(password, user.password)
+        //const passwordValid = password.equals(user.password)
+
+        if (password != user.password) {
             console.log("invalid password")
             return res.status(403).send({ error: "Password invalid" })
+        } else {
+            console.log("Logged in")
+            return res.status(200).send({ Yey: "Done", user, token: jwtSignUser(user) })
         }
-        res.status(200).send({ Yey: "Done", user, token: jwtSignUser(user) })
-        console.log("Logged in")
+        
         
 
     }
     catch (error) {
-        res.status(500).send({ error: "Something went wrong" })
+        console.log(error)
+        return res.status(500).send({ error: "Something went wrong" })
 
     }
 
+}
+
+function jwtSignUser(user) {
+    const ONE_WEEK = 60 * 60 * 1;
+    return jwt.sign(user, "baconpancakes", {
+        expiresIn: ONE_WEEK
+    })
 }
 
 async function del(req, res){

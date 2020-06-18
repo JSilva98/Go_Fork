@@ -18,7 +18,7 @@ import ErrorPage from "@/views/ErrorPage.vue";
 import ErrorPageUserInvalid from "@/views/ErrorPageLoggedUser.vue"
 import AdminMainPage from "@/views/BackOffice/AdminMainPage.vue"
 //import LogIn from "@/components/buttonModalLogin.vue"
-import store from "../store";
+
 
 Vue.use(VueRouter);
 
@@ -61,7 +61,7 @@ const routes = [
     name: "novo-pedido",
     component: novoPedido,
     beforeEnter: (to, from, next) => {
-      if(store.state.loggedUser.id==-1){
+      if(localStorage.getItem("userLoggedIn").userLoggedIn !=-1){
         next("/logIn")
       }else{
         next();
@@ -73,7 +73,7 @@ const routes = [
     name: "adminMainPage",
     component: AdminMainPage,
     beforeEnter: (to, from, next) => {
-      if(store.state.loggedUser.id== 0){
+      if(localStorage.getItem("userLoggedIn").userLoggedIn !=-1){
         next()
       }else{
         next("/errorPageInvalidUser");
@@ -85,7 +85,7 @@ const routes = [
    name: "user-backoffice",
    component: UserBackOffice,
    beforeEnter: (to, from, next) => {
-     if(store.state.loggedUser.id== 0){
+    if(localStorage.getItem("userLoggedIn").userLoggedIn !=-1){
        next()
      }else{
        next("/");
@@ -97,7 +97,7 @@ const routes = [
     name: "request-backoffice",
     component: RequestsBackOffice,
     beforeEnter: (to, from, next) => {
-      if(store.state.loggedUser.id== 0){
+      if(localStorage.getItem("userLoggedIn").userLoggedIn !=-1){
         next()
       }else{
         next("/errorPageInvalidUser");
@@ -109,7 +109,7 @@ const routes = [
     name: "catalog-backoffice",
     component: CatalogBackOffice,
     beforeEnter: (to, from, next) => {
-      if(store.state.loggedUser.id== 0){
+      if(localStorage.getItem("userLoggedIn").userLoggedIn !=-1){
         next()
       }else{
         next("/errorPageInvalidUser");
@@ -121,7 +121,7 @@ const routes = [
     name: "menus-backoffice",
     component: MenusBackOffice,
     beforeEnter: (to, from, next) => {
-      if(store.state.loggedUser.id== 0){
+      if(localStorage.getItem("userLoggedIn").userLoggedIn !=-1){
         next()
       }else{
         next("/errorPageInvalidUser");
@@ -138,7 +138,7 @@ const routes = [
     name: "myrequests",
     component: MyRequests,
     beforeEnter: (to, from, next) => {
-      if(store.state.loggedUser.id!= -1){
+      if(localStorage.getItem("userLoggedIn").userLoggedIn !=-1){
         next()
       }else{
         next("/errorPageInvalidUser");
@@ -155,7 +155,7 @@ const routes = [
     name: "profile",
     component: Profile,
     beforeEnter: (to, from, next) => {
-      if(store.state.loggedUser.id!= -1){
+      if(localStorage.getItem("userLoggedIn").userLoggedIn !=-1){
         next()
       }else{
         next("/errorPageInvalidUser");

@@ -15,7 +15,7 @@
 
 export default {
   beforeDestroy() {
-    //update Local Storage Users
+   /*  //update Local Storage Users
     localStorage.setItem("users", JSON.stringify(this.$store.state.users));
     //update Local Storage Menus
     localStorage.setItem("menus", JSON.stringify(this.$store.state.menus));
@@ -43,10 +43,10 @@ export default {
      localStorage.setItem(
           "rewards",
           JSON.stringify(this.$store.state.rewards)
-        );
+        ); */
   },
   created() {
-    window.addEventListener(
+   /*  window.addEventListener(
       "beforeunload",
       () => {
          //update Local Storage Users
@@ -136,8 +136,8 @@ export default {
       this.$store.state.rewards = JSON.parse(localStorage.getItem("rewards"));
 
       console.log("Created function: set local rewards in store");
-    }
-  }
+    } */
+  } 
 };
 </script>
 

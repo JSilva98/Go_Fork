@@ -91,6 +91,8 @@
 //import hero from "@/components/hero.vue";
 //import Footer from "@/components/footer.vue";
 import Swal from "sweetalert2";
+import axios from "axios";
+
 
 export default {
   components: {
@@ -107,6 +109,7 @@ export default {
       users:null,
       emailCheck:true,
       valid: true,
+      url: "http://localhost:3000/users",
       
       emailRules: [
         v => !!v || 'E-mail é obrigatorio ',
@@ -122,7 +125,7 @@ export default {
     document.getElementById("parallax").style.height = "100vh";
   },
   methods: {
-    registo() {
+    async registo() {
       this.emailCheck=true;
       for(let i=0;i<this.users.length;i++)
       {
@@ -139,18 +142,7 @@ export default {
 
       }
       if (this.confirmarPassword != this.password) {
-        // this.$store.commit("REGISTER", {
-        //   id: this.$store.getters.getLastId,
-        //   username: this.username,
-        //   password: this.password,
-        //   email: this.email,
-        //   foto: "",
-        //   type: 3
-        // });
-        // Swal.fire({
-        //   title: "Utilizador criado com sucesso!",
-        //   icon: "success"
-        // }).then(this.$router.push({name:"login"}));
+    
       
         Swal.fire({
           title: "Palavras passe nao coincidem!",
@@ -158,7 +150,22 @@ export default {
          })
       }
       if(this.confirmarPassword == this.password && this.emailCheck==true){
-        this.$store.commit("REGISTER", {
+          const response = await axios.post(this.url + "/", {
+          username: this.username,
+          email: this.email,
+          password: this.password
+          
+        }).then(this.$router.push({ name: "login" }));
+
+        if (response.data.error) {
+          console.log(response.data.error);
+          Swal({
+            type: "error",
+            title: "Ocorreu um erro, tente mais tarde"
+          });
+        }
+
+        /* this.$store.commit("REGISTER", {
           id: this.$store.getters.getLastId,
 
           username: this.username,
@@ -170,7 +177,7 @@ export default {
         Swal.fire({
           title: "Utilizador criado com sucesso!",
           icon: "success"
-        }).then(this.$router.push({name:"login"}));
+        }).then(this.$router.push({name:"login"})); */
 
       }
     }

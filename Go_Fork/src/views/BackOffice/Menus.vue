@@ -1,66 +1,71 @@
 <template>
   <v-content>
     <NavbarSemLog />
-    <div><router-link :to="{name:'adminMainPage'}" tag="button">
-          <v-btn class="cBtn" dark small color="#0b5aa8"> <v-icon dark>mdi-arrow-left-bold-circle-outline</v-icon></v-btn>
-        </router-link>
+    <div>
+      <router-link :to="{name:'adminMainPage'}" tag="button">
+        <v-btn class="cBtn" dark small color="#0b5aa8">
+          <v-icon dark>mdi-arrow-left-bold-circle-outline</v-icon>
+        </v-btn>
+      </router-link>
     </div>
     <div>
-       <h2>
+      <h2>
         <span>Gestão de Menus</span>
       </h2>
-       <p class="center">Nesta página poderá gerir todos menus disponiveis na nossa aplicação. Lembre-se que só pode adicionar menus a serviços já existentes.</p>
+      <p
+        class="center"
+      >Nesta página poderá gerir todos menus disponiveis na nossa aplicação. Lembre-se que só pode adicionar menus a serviços já existentes.</p>
     </div>
-      <v-dialog v-model="dialog" persistent max-width="600px">
-        <template v-slot:activator="{ on }">
-          <div class="btnPos">
-            <v-btn class="btnAdd" color="indigo" dark v-on="on">Adicionar Menu</v-btn>
-          </div>
-        </template>
-        <v-card>
-          <v-card-title>
-            <span class="headline">Adicionar Menu</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field label="Nome do Menu*" v-model="name" required></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field label="Link da Imagem*" v-model="imgLink" required></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  Entre cada item que insira utilize uma virgula para os separar.
-                  <v-text-field label="Comida*" v-model="food" required></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  Entre cada item que insira utilize uma virgula para os separar.
-                  <v-text-field label="Bebida*" v-model="drink" required></v-text-field>
-                </v-col>
+    <v-dialog v-model="dialog" persistent max-width="600px">
+      <template v-slot:activator="{ on }">
+        <div class="btnPos">
+          <v-btn class="btnAdd" color="indigo" dark v-on="on">Adicionar Menu</v-btn>
+        </div>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">Adicionar Menu</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field label="Nome do Menu*" v-model="name" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="Link da Imagem*" v-model="imgLink" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                Entre cada item que insira utilize uma virgula para os separar.
+                <v-text-field label="Comida*" v-model="food" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                Entre cada item que insira utilize uma virgula para os separar.
+                <v-text-field label="Bebida*" v-model="drink" required></v-text-field>
+              </v-col>
 
-                <v-col cols="12" sm="6">
-                  <v-select
-                    :items="services"
-                    label="Serviços de Referencia*"
-                    item-text="name"
-                    item-value="id"
-                    v-model="idServico"
-                    required
-                  ></v-select>
-                </v-col>
-              </v-row>
-            </v-container>
-            <small>*indicates required field</small>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-            <v-btn color="blue darken-1" text @click="addItem(),  dialog = false">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    
+              <v-col cols="12" sm="6">
+                <v-select
+                  :items="services"
+                  label="Serviços de Referencia*"
+                  item-text="name"
+                  item-value="id"
+                  v-model="idServico"
+                  required
+                ></v-select>
+              </v-col>
+            </v-row>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+          <v-btn color="blue darken-1" text @click="addItem(),  dialog = false">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <br />
     <table>
       <tr>
@@ -75,7 +80,9 @@
       <tr v-for="menu in menus" :key="menu.id">
         <td>{{ menu.id }}</td>
         <td>{{ menu.name }}</td>
-        <td><v-btn small @click="openPhoto(menu.id)" color="lightblue">Mostrar Link</v-btn></td>
+        <td>
+          <v-btn small @click="openPhoto(menu.id)" color="lightblue">Mostrar Link</v-btn>
+        </td>
         <td>{{ menu.food.toString() }}</td>
         <td>{{ menu.drink.toString() }}</td>
         <td>{{ menu.idServico }}</td>
@@ -84,7 +91,8 @@
         </td>
       </tr>
     </table>
-    <br> <br>
+    <br />
+    <br />
     <Footer></Footer>
   </v-content>
 </template>
@@ -107,7 +115,7 @@ tr:nth-child(even) {
 }
 
 th {
-  background-color: #F24B44;
+  background-color: #f24b44;
   color: white;
 }
 
@@ -159,13 +167,13 @@ h2 span {
   margin-top: 25px;
   text-align: center;
 }
-
 </style>
 
 <script>
 import NavbarSemLog from "@/components/NavBarSemLog.vue";
 import Footer from "@/components/footer.vue";
 import Swal from "sweetalert2";
+import axios from "axios";
 export default {
   components: {
     NavbarSemLog,
@@ -179,21 +187,45 @@ export default {
       idServico: 0,
       name: "",
       imgLink: "",
-      food: [],
-      drink: [],
-      menus: this.$store.state.menus
+      food: "",
+      drink: "",
+      menus: null,
+      url: "http://localhost:3000/menus",
     };
   },
+
+  created() {
+    axios
+      .get("http://localhost:3000/menus")
+      .then(res => {
+        this.menus = res.data;
+        console.log(this.menus);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  },
+
   methods: {
-    addItem() {
-      this.$store.commit("ADDMENU", {
+    async addItem() {
+      /* this.$store.commit("ADDMENU", {
         id: this.$store.getters.getMenuLastId,
         idServico: this.idServico,
         name: this.name,
         imgLink: this.imgLink,
         food: this.food.split(','),
         drink: this.drink.split(','),
-      });
+      }); */
+
+       const response = await axios.post(this.url + "/", {
+          idServico: this.idServico,
+          name: this.name,
+          imgLink: this.imgLink,
+          food: this.food,
+          drink: this.drink,
+          
+        })
+        console.log(response)
     },
 
     openPhoto(id) {

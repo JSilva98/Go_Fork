@@ -92,7 +92,7 @@ export default new Vuex.Store({
       }
     ],
     users: [
-      {
+      /* {
         id: 0,
         username: "admin",
         password: "123",
@@ -105,7 +105,7 @@ export default new Vuex.Store({
         password: "123",
         foto: "https://cdn2.iconfinder.com/data/icons/facebook-51/32/FACEBOOK_LINE-01-512.png",
         type: 3
-      }
+      } */
 
     ],
     achievements: [
@@ -150,22 +150,22 @@ export default new Vuex.Store({
         progress: 0,
       }
     ],
-    rewards:[
+    rewards: [
       {
-        id:0,
-        tittle:"Fazer um pedido de graça",
-        desc:"Junte 200‬ pontos para receber um pedido gratuito",
-        progress:0,
-        meta:200,
-        complete:false,
+        id: 0,
+        tittle: "Fazer um pedido de graça",
+        desc: "Junte 200‬ pontos para receber um pedido gratuito",
+        progress: "0",
+        meta: 200,
+        complete: false,
       },
       {
-        id:1,
-        tittle:"Receber um cupao de 20€",
-        desc:"Junte 100‬ pontos para receber um cupao de 20€",
-        progress:0,
-        meta:100,
-        complete:false,
+        id: 1,
+        tittle: "Receber um cupao de 20€",
+        desc: "Junte 100‬ pontos para receber um cupao de 20€",
+        progress: 0,
+        meta: 100,
+        complete: false,
       }
     ],
     loggedUser: { id: -1 },
@@ -248,52 +248,52 @@ export default new Vuex.Store({
         email: paylod.email,
         foto: paylod.foto,
         type: paylod.type,
-        points:0,
-        rewards:{
-        requestServiceForFree:false,
-        get20EurosCupon:false,
-        achievements: [
-      {
-        id: 0,
-        tittle: "Primeiro Pedido",
-        desc: "Faça o seu primeiro pedido para receber 5 pontos!",
-        points: 5,
-        available: true,
-        progress: 0,
-      },
-      {
-        id: 1,
-        tittle: "Primeiro Pagamento",
-        desc: "Faça o seu primeiro pagamento para receber 5 pontos!",
-        points: 5,
-        available: true,
-        progress: 0,
-      },
-      {
-        id: 2,
-        tittle: "Primeira review",
-        desc: "Faça o seu primeiro pedido para receber 5 pontos!",
-        points: 5,
-        available: true,
-        progress: 0,
-      },
-      {
-        id: 3,
-        tittle: "Fazer 10 pagamentos",
-        desc: "Faça 10 pagamentos para receber 50 pontos!",
-        points: 50,
-        available: true,
-        progress: 0,
-      },
-      {
-        id: 4,
-        tittle: "Fazer 10 reviews",
-        desc: "Faça o seu primeiro pedido para receber 35‬ pontos!",
-        points: 35,
-        available: true,
-        progress: 0,
-      }
-    ]
+        points: 0,
+        rewards: {
+          requestServiceForFree: false,
+          get20EurosCupon: false,
+          achievements: [
+            {
+              id: 0,
+              tittle: "Primeiro Pedido",
+              desc: "Faça o seu primeiro pedido para receber 5 pontos!",
+              points: 5,
+              available: true,
+              progress: 0,
+            },
+            {
+              id: 1,
+              tittle: "Primeiro Pagamento",
+              desc: "Faça o seu primeiro pagamento para receber 5 pontos!",
+              points: 5,
+              available: true,
+              progress: 0,
+            },
+            {
+              id: 2,
+              tittle: "Primeira review",
+              desc: "Faça o seu primeiro pedido para receber 5 pontos!",
+              points: 5,
+              available: true,
+              progress: 0,
+            },
+            {
+              id: 3,
+              tittle: "Fazer 10 pagamentos",
+              desc: "Faça 10 pagamentos para receber 50 pontos!",
+              points: 50,
+              available: true,
+              progress: 0,
+            },
+            {
+              id: 4,
+              tittle: "Fazer 10 reviews",
+              desc: "Faça o seu primeiro pedido para receber 35‬ pontos!",
+              points: 35,
+              available: true,
+              progress: 0,
+            }
+          ]
 
         },
 
@@ -443,7 +443,7 @@ export default new Vuex.Store({
     getAchievements: (state) => {
       return state.achievements;
     },
-    
+
     getRewards: (state) => {
       return state.rewards;
     },
@@ -451,7 +451,7 @@ export default new Vuex.Store({
     getNotifications: (state) => {
       return state.notifications;
     },
-    getUsers:(state) => {
+    getUsers: (state) => {
       return state.users;
     },
 

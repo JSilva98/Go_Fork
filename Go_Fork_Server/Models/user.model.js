@@ -18,6 +18,19 @@ var userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    rewards:{
+        requestServiceForFree: { type: Boolean, required: true },
+        get20EurosCupon: { type: Boolean, required: true },
+        acheivements: [{
+            id: { type: Number, required: true },
+            tittle: { type: String, required: true },
+            desc: { type: String, required: true },
+            points: { type: Number, required: true },
+            available: { type: Boolean, required: true },
+            progress: { type: Number, required: true },
+        }],
+    },
+    
     type: {
         type: Number,
         required: true,
@@ -25,5 +38,5 @@ var userSchema = new mongoose.Schema({
 })
 
 const User = mongoose.model('User', userSchema);
- 
+
 module.exports = User;

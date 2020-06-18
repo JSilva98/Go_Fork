@@ -1,62 +1,68 @@
 <template>
   <div class="about">
     <NavbarSemLog />
-    <div><router-link :to="{name:'adminMainPage'}" tag="button">
-          <v-btn class="cBtn" dark small color="#0b5aa8"> <v-icon dark>mdi-arrow-left-bold-circle-outline</v-icon></v-btn>
-        </router-link></div>
     <div>
-       <h2>
+      <router-link :to="{name:'adminMainPage'}" tag="button">
+        <v-btn class="cBtn" dark small color="#0b5aa8">
+          <v-icon dark>mdi-arrow-left-bold-circle-outline</v-icon>
+        </v-btn>
+      </router-link>
+    </div>
+    <div>
+      <h2>
         <span>Gestão de Utilizadores</span>
       </h2>
-       <p class="center">Nesta página poderá gerir todos utilizadores existentes na plataforma, tal como tornar um utilizador em administrador e vice-versa.</p>
+      <p
+        class="center"
+      >Nesta página poderá gerir todos utilizadores existentes na plataforma, tal como tornar um utilizador em administrador e vice-versa.</p>
     </div>
     <div class="filterDiv">
-        <div class="form-inline padding">
-          <v-row>
-            <v-col cols="8">
-              <v-text-field v-model="nameFilter" label="Filtrar por Username"></v-text-field>
-            </v-col>
-            <v-col cols="4">
-              <v-btn class="margin" @click="filterUsersByName" small color="indigo" dark>Filtrar</v-btn>
-            </v-col>
-          </v-row>
-        </div>
+      <div class="form-inline padding">
+        <v-row>
+          <v-col cols="8">
+            <v-text-field v-model="nameFilter" label="Filtrar por Username"></v-text-field>
+          </v-col>
+          <v-col cols="4">
+            <v-btn class="margin" @click="filterUsersByName" small color="indigo" dark>Filtrar</v-btn>
+          </v-col>
+        </v-row>
+      </div>
     </div>
     <table>
       <tr>
-       <!--  <th>ID do Utilizador</th> -->
+        <!--  <th>ID do Utilizador</th> -->
         <th>Username</th>
         <th>Email</th>
         <th>Password</th>
         <th>Tipo de Utilizador</th>
         <th>Ações</th>
       </tr>
-      <tr v-for="user in filteredUsers" :key="user.id">
+      <tr v-for="user in filteredUsers" :key="user._id">
         <!-- <td>{{ user.id }}</td> -->
         <td>{{ user.username }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.password }}</td>
         <td>{{ user.type }}</td>
         <td>
-          <v-btn small @click="removeUser(user.id)" color="error">Remover</v-btn>
+          <v-btn small @click="removeUser(user._id)" color="error">Remover</v-btn>
           <v-btn
             small
             class="marginBtn"
             v-if="user.type == '1'"
-            @click="removeAdmin(user.id)"
+            @click="removeAdmin(user._id)"
             color="success"
           >Retirar Admin</v-btn>
           <v-btn
             small
             class="marginBtn"
             v-if="user.type == '3'"
-            @click="addAdmin(user.id)"
+            @click="addAdmin(user._id)"
             color="success"
           >Tornar Admin</v-btn>
         </td>
       </tr>
     </table>
-    <Footer ></Footer>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -78,7 +84,7 @@ tr:nth-child(even) {
 }
 
 th {
-  background-color: #F24B44;
+  background-color: #f24b44;
   color: white;
 }
 
@@ -126,13 +132,13 @@ h2 span {
   padding: 0 10px;
 }
 
-Footer{
-   position: fixed;
-    height: 150px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    margin-bottom: 0px;
+footer {
+  position: fixed;
+  height: 150px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  margin-bottom: 0px;
 }
 </style>
 
@@ -151,7 +157,7 @@ export default {
       filteredUsers: null,
       users: null,
       nameFilter: "",
-      
+
       username: ""
     };
   },
@@ -193,15 +199,26 @@ export default {
           reverseButtons: true
         })
         .then(result => {
-          if (result.value) {
+          for (let i = 0; i < this.users.length; i++) {
+            if (this.users[i]._id === id) {
+            if (result.value) {
             swalButtons.fire("Utilizador removido com sucesso", "", "success");
-            this.filteredUsers = this.users.filter(user => user.id != id);
-             this.$store.state.users = this.filteredUsers
+           let route = "http://localhost:3000/users/" + this.users[i]._id;
+              axios
+                .delete(route)
+                .then(res => {
+                  console.log(res);
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+              this.users.splice(i, 1);
           } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-          ) {
+            result.dismiss === Swal.DismissReason.cancel 
+           ) {
             swalButtons.fire("Cancelado", "A sua ação foi cancelada", "error");
+          } 
+          }
           }
         });
     },
@@ -229,21 +246,31 @@ export default {
         })
         .then(result => {
           if (result.value) {
-            swalButtons.fire("Utilizador removido com sucesso", "", "success");
+            swalButtons.fire("Admin removido com sucesso", "", "success");
             for (let i = 0; i < this.users.length; i++) {
-              if (this.users[i].id === id) {
-                this.users[i].type = 3;
-                console.log(this.users[i].type);
-              }
-            }
-          } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-          ) {
+              if (this.users[i]._id === id) {
+                let route ="http://localhost:3000/users/" + this.users[i]._id;
+
+                axios
+                  .put(route, {
+                    type: 3
+                  })
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
+                this.users[i].type = 3
+              } else if ( result.dismiss === Swal.DismissReason.cancel ) {
             swalButtons.fire("Cancelado", "A sua ação foi cancelada", "error");
-          }
+          }  
+            }
+            } 
         });
     },
+
+
     addAdmin(id) {
       const swalButtons = Swal.mixin({
         customClass: {
@@ -267,26 +294,36 @@ export default {
         })
         .then(result => {
           if (result.value) {
-            swalButtons.fire("Utilizador removido com sucesso", "", "success");
+            swalButtons.fire("Admin adicionado com sucesso", "", "success");
             for (let i = 0; i < this.users.length; i++) {
-              if (this.users[i].id === id) {
-                this.users[i].type = 1;
-                console.log(this.users[i].type);
+              if (this.users[i]._id === id) {
+                 let route ="http://localhost:3000/users/" + this.users[i]._id;
+                console.log(this.filteredUsers)
+                axios
+                  .put(route, {
+                    type: 1
+                  })
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
+                this.users[i].type = 1;   
               }
             }
           } else if (
-            /* Read more about handling dismissals below */
-            result.dismiss === Swal.DismissReason.cancel
-          ) {
+             result.dismiss === Swal.DismissReason.cancel 
+         ) {
             swalButtons.fire("Cancelado", "A sua ação foi cancelada", "error");
-          }
+          } 
         });
     },
     filterUsersByName() {
-       this.filteredUsers = [];
-        let filterNameResult = false;
+      this.filteredUsers = [];
+      let filterNameResult = false;
       for (let i = 0; i < this.users.length; i++) {
-           this.username = this.users[i].username
+        this.username = this.users[i].username;
         let upperName = this.username.toUpperCase();
         let upperFilterName = this.nameFilter.toUpperCase();
 

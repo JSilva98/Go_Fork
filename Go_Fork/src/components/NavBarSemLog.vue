@@ -4,7 +4,7 @@
       <v-toolbar-title>
         <router-link :to="{name: 'home'}" tag="button">
           Go Fork
-           <v-img src="../assets/logoV2.png" class="img" contain max-height="60"></v-img>
+          <v-img src="../assets/logoV2.png" class="img" contain max-height="60"></v-img>
         </router-link>
       </v-toolbar-title>
 
@@ -17,10 +17,10 @@
         <router-link :to="{name:'galery'}" tag="button">
           <v-btn text>Galeria</v-btn>
         </router-link>
-        <router-link :to="{name:'login'}" tag="button" v-if="getLoggedUser().id==-1">
+        <router-link :to="{name:'login'}" tag="button" v-if="userLoggedIn == -1">
           <v-btn text>Login</v-btn>
         </router-link>
-        <v-menu offset-y v-if="getLoggedUser().type==3">
+        <v-menu offset-y v-if="userLoggedIn != -1 && type == 3">
           <template v-slot:activator="{ on }" @click="checkNewNotifications=false">
             <v-btn text v-on="on">
               <span v-if="checkNewNotifications == true">
@@ -32,7 +32,7 @@
             </v-btn>
           </template>
 
-          <v-list v-if="getLoggedUser().type==3">
+          <v-list v-if="userLoggedIn != -1 && type == 3">
             <v-list-item v-for="notification in notifications" :key="notification.id">
               <v-list-item-title>
                 <v-btn text v-if="notification.state === 0">Sem Notificações</v-btn>
@@ -55,7 +55,7 @@
           </v-list>
         </v-menu>
 
-        <v-menu offset-y v-if="getLoggedUser().id!=-1">
+        <v-menu offset-y v-if="userLoggedIn != -1 && type != -1">
           <template v-slot:activator="{ on }">
             <v-btn text v-on="on">
               <v-icon>mdi-account</v-icon>
@@ -64,30 +64,30 @@
           </template>
 
           <v-list>
-            <v-list-item v-if="getLoggedUser().type==3">
+            <v-list-item v-if="userLoggedIn != -1 && type == 3">
               <v-list-item-title>
                 <router-link :to="{name:'profile'}" tag="button">
                   <v-btn text>Perfil</v-btn>
                 </router-link>
               </v-list-item-title>
             </v-list-item>
-            <v-list-item v-if="getLoggedUser().type==3">
+            <v-list-item v-if="userLoggedIn != -1 && type == 3">
               <v-list-item-title>
                 <router-link :to="{name:'myrequests'}" tag="button">
                   <v-btn text>Meus Pedidos</v-btn>
                 </router-link>
               </v-list-item-title>
             </v-list-item>
-            <v-list-item v-if="getLoggedUser().type==1">
+            <v-list-item v-if="userLoggedIn != -1 && type == 1">
               <v-list-item-title>
                 <router-link :to="{name:'adminMainPage'}" tag="button">
                   <v-btn text>Admin Dashboard</v-btn>
                 </router-link>
               </v-list-item-title>
             </v-list-item>
-            <v-list-item>
+            <v-list-item v-if="userLoggedIn != -1">
               <v-list-item-title>
-                <router-link :to="{name:'home'}" tag="button">
+                <router-link :to="{name:'login'}" tag="button">
                   <v-btn text v-on:click="logout()">Log Out</v-btn>
                 </router-link>
               </v-list-item-title>
@@ -106,48 +106,57 @@
 </style>
 
 <script>
+import axios from "axios";
 export default {
-  components: {
-  },
+  components: {},
 
   data() {
     return {
       notification: 0,
       qtNotification: 0,
       saveNotification: 0,
-
+      userLoggedIn: localStorage.getItem("userLoggedIn"),
+      type: 0,
+      users: [],
       notifications: null
     };
   },
-  beforeCreate: function() {
-    this.loggedUser = this.$store.getters.getLoggedUser;
-  },
-  created: function() {
-    console.log(this.notification);
 
-    this.notifications = this.$store.getters.getNotifications.filter(
+
+  created: function() {
+      this.notifications = this.$store.getters.getNotifications.filter(
       notification =>
         notification.userId === this.$store.getters.getLoggedUser.id
     );
+    
+    axios
+      .get("http://localhost:3000/users/")
+      .then(res => {
+        this.users = res.data;
+        this.getLoggedUser();
+        //console.log(this.users)
+      })
+      .catch(error => {
+        console.log(error);
+      });
   },
 
-  updated: function() {
-    this.loggedUser = this.$store.getters.getLoggedUser;
-  },
+
   computed: {
     checkNewNotifications: function() {
-      return this.notifications.some(
-        notification =>
-          notification.new == true
-      );
+      return this.notifications.some(notification => notification.new == true);
     }
   },
   methods: {
     logout() {
-      this.$store.commit("LOGOUT");
+      localStorage.setItem("userLoggedIn", -1);
     },
     getLoggedUser() {
-      return this.$store.getters.getLoggedUser;
+       for (let i = 0; i < this.users.length; i++) {
+        if (this.users[i]._id == this.userLoggedIn) {
+          this.type = this.users[i].type;
+        }
+      }
     },
 
     updateNotification(id) {
@@ -155,17 +164,8 @@ export default {
         notification => notification.id !== id
       );
       this.$store.state.notifications = this.notifications;
-    },
+    }
 
-    /*bellClick() {
-      for(let i=0;i< this.notifications.length;i++)
-      {
-        if(this.notifications[i].new==true){
-          this.notifications[i].new=false;
-        }
-      }
-       this.checkNewNotifications()
-    }*/
   }
 };
 </script>

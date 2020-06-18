@@ -1,7 +1,9 @@
 <template>
   <div>
     <NavbarSemLog />
-    <h2><span>Perfil</span></h2>
+    <h2>
+      <span>Perfil</span>
+    </h2>
     <v-container fluid>
       <br />
       <v-layout column>
@@ -9,14 +11,14 @@
           <v-card-text>
             <v-row>
               <v-flex>
-                <v-img 
+                <v-img
                   v-if="this.loggedUser.foto != ''"
                   max-height="125"
                   max-width="125"
                   class="centerImg"
                   :src="this.loggedUser.foto"
                 ></v-img>
-                <v-img 
+                <v-img
                   v-if="this.loggedUser.foto == ''"
                   max-height="125"
                   max-width="125"
@@ -87,13 +89,15 @@
     <br />
     <br />
     <v-row class="justify-center">
-      <h2><span>Conquistas</span></h2>
+      <h2>
+        <span>Conquistas</span>
+      </h2>
     </v-row>
     <br />
     <br />
     <!-- Achievements -->
     <v-row class="justify-center">
-      <v-col v-for="achievement in achievements" v-bind:key="achievement.id">
+      <v-col v-for="achievement in acheivements" v-bind:key="achievement.id">
         <v-card class="mx-auto" max-width="344" height="150" outlined shaped>
           <v-list-item three-line>
             <v-list-item-content>
@@ -120,7 +124,9 @@
     <br />
     <br />
     <v-row class="justify-center">
-      <h2><span>Recompensas</span></h2>
+      <h2>
+        <span>Recompensas</span>
+      </h2>
       <br />
       <br />
     </v-row>
@@ -173,22 +179,23 @@
 }
 
 h2 {
-   width: 100%; 
-   text-align: center; 
-   border-bottom: 1px solid #000; 
-   line-height: 0.1em;
-   margin-top: 25px; 
-} 
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #000;
+  line-height: 0.1em;
+  margin-top: 25px;
+}
 
-h2 span { 
-    background:#fafafa; 
-    padding:0 10px; 
+h2 span {
+  background: #fafafa;
+  padding: 0 10px;
 }
 </style>
 
 <script>
 import NavbarSemLog from "@/components/NavBarSemLog.vue";
 import Footer from "@/components/footer.vue";
+import axios from "axios";
 export default {
   components: {
     NavbarSemLog,
@@ -196,14 +203,15 @@ export default {
   },
   data: function() {
     return {
-      loggedUser: this.$store.state.loggedUser,
+      loggedUser: {},
       points: this.$store.state.loggedUser.points,
-      users: this.$store.state.users,
+      users: null,
+      logUser: localStorage.getItem("userLoggedIn"),
       editUsername: "",
       editFoto: "",
       editEmail: "",
       editPassword: "",
-      achievements: null,
+      acheivements: null,
       rewards: null,
       value: 0,
       bufferValue: 100
@@ -219,22 +227,27 @@ export default {
   },
 
   created() {
+    axios
+      .get("http://localhost:3000/users/")
+      .then(res => {
+        this.users = res.data;
+        this.getLoggedUser();
+      
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
     //this.achievements = this.$store.getters.getAchievements;
-    this.rewards = this.$store.getters.getRewards;
-   this.achievements =this.loggedUser.rewards.achievements;
-   console.log(this.achievements)
-   //this.rewards= this.loggedUser.arewards;
+    //this.rewards= this.loggedUser.rewards;
+    
     for (let i = 0; i < this.rewards.length; i++) {
       this.rewards[i].progress = (this.points * 100) / this.rewards[i].meta;
     }
   },
 
   methods: {
-    check() {
-      console.log(this.loggedUser);
-    },
-
-    editUser() {
+        editUser() {
       for (let i = 0; i < this.users.length; i++) {
         if (this.loggedUser.id === this.users[i].id) {
           if (this.editUsername == "") {
@@ -257,6 +270,17 @@ export default {
           } else {
             this.users[i].password = this.editPassword;
           }
+        }
+      }
+    },
+
+    getLoggedUser() {
+      for (let i = 0; i < this.users.length; i++) {
+        if (this.users[i]._id == this.logUser) {
+          this.loggedUser = this.users[i];
+          this.acheivements = this.loggedUser.rewards.acheivements;
+          this.rewards = this.$store.getters.getRewards;
+          console.log(this.rewards);
         }
       }
     }
