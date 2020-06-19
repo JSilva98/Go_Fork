@@ -37,6 +37,9 @@
                 <v-rating :value="review.rating" background-color="grey" color="grey" readonly></v-rating>
               </v-list-item-title>
               <v-list-item-subtitle>{{review.comment}}</v-list-item-subtitle>
+              <td v-if="userLoggedIn != -1 && type == 1">
+                    <v-btn small @click="removeReview(review._id)" color="error">Remover</v-btn>
+                  </td>
             </v-list-item-content>
           </v-list-item>
         </v-card>
@@ -72,6 +75,8 @@ h2 span {
 <script>
 import NavbarSemLog from "@/components/NavBarSemLog.vue";
 import Footer from "@/components/footer.vue";
+import Swal from "sweetalert2";
+import axios from "axios";
 export default {
   components: {
     NavbarSemLog,
@@ -79,7 +84,10 @@ export default {
   },
   data: function() {
     return {
-      reviews: this.$store.state.reviews,
+      reviews: [],
+      users: null,
+      userLoggedIn: localStorage.getItem("userLoggedIn"),
+      type: 0,
       slides: [
         "https://www.eventosesabores.pt/wp-content/uploads/2019/06/eventosesabores_homepage_img5.jpg",
         "https://mariolagastronomia.com.br/wp-content/uploads/2017/10/Servico-de-catering-SP.jpg",
@@ -89,8 +97,85 @@ export default {
     };
   },
 
+  created() {
+ 
+
+    axios
+        .get("http://localhost:3000/reviews/")
+        .then(res => {
+          this.reviews = res.data;
+        })
+        .catch(error => {
+          console.log(error);
+        })
+
+
+    axios
+      .get("http://localhost:3000/users/")
+      .then(res => {
+        this.users = res.data;
+        this.getLoggedUser();
+        //console.log(this.users)
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  },
   methods: {
-    
+    getLoggedUser() {
+       for (let i = 0; i < this.users.length; i++) {
+        if (this.users[i]._id == this.userLoggedIn) {
+          this.type = this.users[i].type;
+        }
+      }
+    },
+
+    removeReview(id){
+      const swalButtons = Swal.mixin({
+        customClass: {
+          confirmButton: "confirm-button-class",
+          cancelButton: "cancel-button-class"
+        },
+        buttonsStyling: true
+      });
+
+      swalButtons
+        .fire({
+          title: "Deseja mesmo remover esta review?",
+          text: "Não vai ser possivel reverter esta ação",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Sim",
+          confirmButtonColor: "#009933",
+          cancelButtonText: "Não",
+          cancelButtonColor: "#990000",
+          reverseButtons: true
+        })
+        .then(result => {
+          if (result.value) {
+            swalButtons.fire("Review removido com sucesso", "", "success");
+            for (let i = 0; i < this.reviews.length; i++) {
+              if (this.reviews[i]._id == id) {
+                let route = "http://localhost:3000/reviews/" + this.reviews[i]._id;
+                axios
+                  .delete(route)
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
+                this.reviews.splice(i, 1);
+              }
+            }
+          } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+          ) {
+            swalButtons.fire("Cancelado", "A sua ação foi cancelada", "error");
+          }
+        });
+    }
   }
 };
 </script>

@@ -1,34 +1,30 @@
 const mongoose = require('../Database/connection')
 const ObjectId = mongoose.Schema.Types.ObjectId
 
-var menuSchema = new mongoose.Schema({
-    idServico: {
+var reviewSchema = new mongoose.Schema({
+    userId: {
         type: String,
         required: true,
     },
-    name: {
+    userName: {
         type: String,
         required: true,
     },
-    food: {
+    foto: {
         type: String,
         required: true,
     },
-    drink: {
+    rating: {
+        type: Number,
+        required: true,
+    },
+    comment: {
         type: String,
         required: true,
     },
-    imgLink: {
-        type: String,
-        required: true,
-    },
-    selected: {
-        type: Boolean,
-        required: true,
-    },
-   
+     
 })
 
-const Menu = mongoose.model('Menu', menuSchema);
+const Review = mongoose.model('Review', reviewSchema);
  
-module.exports = Menu;
+module.exports = Review;

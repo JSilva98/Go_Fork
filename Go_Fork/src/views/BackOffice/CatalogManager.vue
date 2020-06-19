@@ -47,17 +47,15 @@
     <br />
     <table>
       <tr>
-        <th>ID do Serviço</th>
         <th>Nome</th>
         <th>Link da Imagem</th>
         <th>Actions</th>
       </tr>
       <tr v-for="service in services" :key="service.id">
-        <td>{{ service.id }}</td>
         <td>{{ service.name }}</td>
-       <td><v-btn small @click="openPhoto(service.id)" color="lightblue">Mostrar Link</v-btn></td>
+       <td><v-btn small @click="openPhoto(service._id)" color="lightblue">Mostrar Link</v-btn></td>
         <td>
-          <v-btn small @click="removeService(service.id)" color="error">Remover</v-btn>
+          <v-btn small @click="removeService(service._id)" color="error">Remover</v-btn>
         </td>
       </tr>
     </table>
@@ -151,6 +149,7 @@ Footer {
 import NavbarSemLog from "@/components/NavBarSemLog.vue";
 import Footer from "@/components/footer.vue";
 import Swal from "sweetalert2";
+import axios from "axios";
 export default {
   components: {
     NavbarSemLog,
@@ -162,16 +161,45 @@ export default {
       dialog: false,
       name: "",
       imgLink: "",
-      services: this.$store.state.services
+      services: null,
+      url:"http://localhost:3000/services"
     };
   },
+
+  created() {
+    axios
+      .get("http://localhost:3000/services/")
+      .then(res => {
+        this.services = res.data;
+        console.log(this.services);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  },
   methods: {
-    addItem() {
-      this.$store.commit("ADDSERVICE", {
+    async addItem() {
+      /* this.$store.commit("ADDSERVICE", {
         id: this.$store.getters.getServLastId,
         name: this.name,
         imgLink: this.imgLink
-      });
+      }); */
+
+       const response = await axios
+        .post(this.url + "/", {
+          name: this.name,
+          imgLink: this.imgLink,
+          selected: false
+        })
+        //.then(window.location.reload());
+      if (response.data.error) {
+        console.log("deu erro");
+        console.log(response.data.error);
+        Swal({
+          type: "error",
+          title: "Ocorreu um erro, tente mais tarde"
+        })
+      }
     },
 
     openPhoto(id) {
@@ -208,7 +236,16 @@ export default {
           if (result.value) {
             swalButtons.fire("Serviço removido com sucesso", "", "success");
             for (let i = 0; i < this.services.length; i++) {
-              if (this.services[i].id == id) {
+              if (this.services[i]._id === id) {
+                let route = "http://localhost:3000/services/" + this.services[i]._id;
+                axios
+                  .delete(route)
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
                 this.services.splice(i, 1);
               }
             }

@@ -3,7 +3,7 @@
     <NavbarSemLog />
     <br />
     <v-tabs v-model="tabs" centered background-color="transparent" color="#F24B44">
-      <v-tab v-for="menu in menus" v-bind:key="menu.namee">{{menu.name}}</v-tab>
+      <v-tab v-for="menu in menus" v-bind:key="menu.name">{{menu.name}}</v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tabs"  >
@@ -18,16 +18,16 @@
                    <br>
                    <v-icon>mdi-silverware-variant</v-icon>
                   Comida:
-                  <ul v-for="items in menu.food" :key="items">
-                    <li>{{items}}</li>     
+                  <ul>
+                    <li>{{menu.food}}</li>       
                   </ul>
                 </v-col>
                 <v-col cols="3">
                    <br>
                    <v-icon>mdi-glass-tulip</v-icon>
                   Bebida:
-                   <ul v-for="items in menu.drink" :key="items">
-                    <li>{{items}}</li>     
+                   <ul>
+                    <li>{{menu.drink}}</li>     
                   </ul>
                 </v-col>
                 <v-col cols="6">
@@ -84,12 +84,9 @@ footer {
 </style>
 
 <script>
-// @ is an alias to /src
-//import HelloWorld from "@/components/HelloWorld.vue";
-//commite test
 import NavbarSemLog from "@/components/NavBarSemLog.vue";
 import Footer from "@/components/footer.vue";
-
+import axios from "axios";
 export default {
   name: "home",
   components: {
@@ -98,26 +95,40 @@ export default {
   },
   data: function() {
     return {
-      menus: [], //this.$store.state.menus,
+      menusAll: null, 
       serviceId: "",
-      tabs: null
+      tabs: null,
+      menus: []
     };
   },
   created() {
-    this.menus = this.$store.getters.getMenus.filter(
-      menu => menu.idServico === this.$route.params.serviceId
-    );
-    //this.currentItem = this.menus[0].name;
-    //getService($route.params.serviceId)
-    //this.serviceId=this.$route.params.serviceId,
-    console.log(this.menus);
+
+
+    axios
+        .get("http://localhost:3000/menus")
+        .then(res => {
+          this.menusAll = res.data;
+          this.getService()
+          console.log(this.menusAll);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+        console.log(this.menus)
+
+        
+
   },
 
   methods: {
-    getService(id) {
-      console.log(id);
-      return this.menus.filter(menu => menu.idServico === id);
-    }
+     getService() {
+        for (let i = 0; i < this.menusAll.length; i++) {
+         if(this.menusAll[i].idServico == this.$route.params.serviceId){
+           this.menus.push(this.menusAll[i])
+         }
+          
+        }
+    } 
   }
 };
 </script>

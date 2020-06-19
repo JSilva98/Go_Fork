@@ -49,7 +49,7 @@
                   :items="services"
                   label="Serviços de Referencia*"
                   item-text="name"
-                  item-value="id"
+                  item-value="_id"
                   v-model="idServico"
                   required
                 ></v-select>
@@ -69,7 +69,6 @@
     <br />
     <table>
       <tr>
-        <th>ID do Menu</th>
         <th>Nome</th>
         <th>Link da Imagem</th>
         <th>Comidas</th>
@@ -78,16 +77,15 @@
         <th>Actions</th>
       </tr>
       <tr v-for="menu in menus" :key="menu.id">
-        <td>{{ menu.id }}</td>
         <td>{{ menu.name }}</td>
         <td>
-          <v-btn small @click="openPhoto(menu.id)" color="lightblue">Mostrar Link</v-btn>
+          <v-btn small @click="openPhoto(menu._id)" color="lightblue">Mostrar Link</v-btn>
         </td>
         <td>{{ menu.food.toString() }}</td>
         <td>{{ menu.drink.toString() }}</td>
         <td>{{ menu.idServico }}</td>
         <td>
-          <v-btn small @click="removeService(menu.id)" color="error">Remover</v-btn>
+          <v-btn small @click="removeService(menu._id)" color="error">Remover</v-btn>
         </td>
       </tr>
     </table>
@@ -182,15 +180,15 @@ export default {
 
   data: function() {
     return {
-      services: this.$store.state.services,
+      services: [],
       dialog: false,
-      idServico: 0,
+      idServico: "",
       name: "",
       imgLink: "",
       food: "",
       drink: "",
       menus: null,
-      url: "http://localhost:3000/menus",
+      url: "http://localhost:3000/menus"
     };
   },
 
@@ -200,6 +198,16 @@ export default {
       .then(res => {
         this.menus = res.data;
         console.log(this.menus);
+      })
+      .catch(error => {
+        console.log(error);
+      }),
+
+      axios
+      .get("http://localhost:3000/services/")
+      .then(res => {
+        this.services = res.data;
+        console.log(this.services);
       })
       .catch(error => {
         console.log(error);
@@ -216,25 +224,33 @@ export default {
         food: this.food.split(','),
         drink: this.drink.split(','),
       }); */
-
-       const response = await axios.post(this.url + "/", {
+      console.log(this.idServico);
+      const response = await axios
+        .post(this.url + "/", {
           idServico: this.idServico,
           name: this.name,
           imgLink: this.imgLink,
           food: this.food,
           drink: this.drink,
-          
+          selected: false
         })
-        console.log(response)
+        //.then(window.location.reload());
+      if (response.data.error) {
+        console.log("deu erro");
+        console.log(response.data.error);
+        Swal({
+          type: "error",
+          title: "Ocorreu um erro, tente mais tarde"
+        });
+      }
     },
 
     openPhoto(id) {
       for (let i = 0; i < this.menus.length; i++) {
-              if (this.menus[i].id == id) {
-               Swal.fire(this.menus[i].imgLink)
-              }
-            }
-      
+        if (this.menus[i]._id == id) {
+          Swal.fire(this.menus[i].imgLink);
+        }
+      }
     },
 
     removeService(id) {
@@ -262,11 +278,19 @@ export default {
           if (result.value) {
             swalButtons.fire("Menu removido com sucesso", "", "success");
             for (let i = 0; i < this.menus.length; i++) {
-              if (this.menus[i].id == id) {
+              if (this.menus[i]._id === id) {
+                let route = "http://localhost:3000/menus/" + this.menus[i]._id;
+                axios
+                  .delete(route)
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
                 this.menus.splice(i, 1);
               }
             }
-            this.$store.state.menus = this.menus
           } else if (
             /* Read more about handling dismissals below */
             result.dismiss === Swal.DismissReason.cancel

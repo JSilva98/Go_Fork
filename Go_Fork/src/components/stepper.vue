@@ -39,7 +39,7 @@
       </v-stepper-header>
 
       <v-stepper-items>
-        <v-stepper-content  step="1">
+        <v-stepper-content step="1">
           <h4 class="center">Que tipo de serviço deseja?</h4>
           <h5
             class="center"
@@ -55,7 +55,7 @@
                         v-if="hover || service.selected==true"
                         class="d-flex transition-fast-in-fast-out orange darken-2 v-card--reveal display-1 white--text"
                         style="height: 100%;"
-                        v-on:click="setSelectedService(service.id)"
+                        v-on:click="setSelectedService(service._id)"
                       >{{service.name}}</div>
                     </v-img>
                   </v-card>
@@ -83,7 +83,7 @@
                         v-if="hover || menu.selected==true"
                         class="d-flex transition-fast-in-fast-out orange darken-2 v-card--reveal display-1 white--text"
                         style="height: 100%;"
-                        v-on:click="setSelectedMenu(menu.id)"
+                        v-on:click="setSelectedMenu(menu._id)"
                       >{{menu.name}}</div>
                     </v-img>
                   </v-card>
@@ -136,7 +136,7 @@
                         v-if="hover || vestuario.selected==true"
                         class="d-flex transition-fast-in-fast-out orange darken-2 v-card--reveal display-1 white--text"
                         style="height: 100%;"
-                        v-on:click="setSelectedVestuario(vestuario.id)"
+                        v-on:click="setSelectedVestuario(vestuario._id)"
                       >{{vestuario.name}}</div>
                     </v-img>
                   </v-card>
@@ -209,12 +209,10 @@
 
 <script>
 import Swal from "sweetalert2";
-//import cardhover from "@/components/cardHover.vue";
+import axios from "axios";
 export default {
   name: "stepper",
-  components: {
-    //cardhover
-  },
+  components: {},
 
   data() {
     return {
@@ -231,41 +229,83 @@ export default {
       extras: "",
       local: "sem local",
       enabled: false,
-      users:null,
-      loggedUser:null
+      users: null,
+      loggedUser: null,
+      Loguser: localStorage.getItem("userLoggedIn"),
+      url: "http://localhost:3000/requests/"
     };
   },
   created() {
-    this.services = this.$store.getters.getServices;
-    this.allMenusStore = this.$store.getters.getMenus;
-    this.vestuarios = this.$store.getters.getVestuarios;
-    this.users=this.$store.getters.getUsers;
-    this.loggedUser=this.$store.getters.getLoggedUser;
-    //this.selectedMenu=this.services.filter(services=> services.selected==true)
-    //this.menus=menus.filter(menu=> menu.idServico == this.selectedService.id)
+    console.log(this.Loguser)
+      axios
+      .get("http://localhost:3000/services/")
+      .then(res => {
+        this.services = res.data;
+        console.log(this.services);
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  
+      axios
+        .get("http://localhost:3000/menus/")
+        .then(res => {
+          this.menus = res.data;
+          this.allMenusStore = res.data;
+          console.log(this.menus);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+
+
+      axios
+        .get("http://localhost:3000/clothing/")
+        .then(res => {
+          this.vestuarios = res.data;
+          console.log(this.vestuarios);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+
+
+      axios
+        .get("http://localhost:3000/users/")
+        .then(res => {
+          this.users = res.data;
+          this.getLoggedUser();
+          console.log(this.users);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+     
   },
+
+
   methods: {
     setSelectedService(id) {
       for (let i = 0; i < this.services.length; i++) {
-        if (this.services[i].selected == true && this.services[i].id != id) {
+        if (this.services[i].selected == true && this.services[i]._id != id) {
           this.services[i].selected = false;
         }
-        if (this.services[i].selected == false && this.services[i].id == id) {
+        if (this.services[i].selected == false && this.services[i]._id == id) {
           this.services[i].selected = true;
           this.selectedService = this.services[i];
           console.log("Selected service:   " + this.services[i]);
           this.menus = this.allMenusStore.filter(
-            menu => menu.idServico == this.selectedService.id
+            menu => menu.idServico == this.selectedService._id
           );
         }
       }
     },
     setSelectedMenu(id) {
       for (let i = 0; i < this.menus.length; i++) {
-        if (this.menus[i].selected == true && this.menus[i].id != id) {
+        if (this.menus[i].selected == true && this.menus[i]._id != id) {
           this.menus[i].selected = false;
         }
-        if (this.menus[i].selected == false && this.menus[i].id == id) {
+        if (this.menus[i].selected == false && this.menus[i]._id == id) {
           this.menus[i].selected = true;
           this.selectedMenu = this.menus[i];
           console.log("Selected menu:   " + this.menus[i]);
@@ -276,13 +316,13 @@ export default {
       for (let i = 0; i < this.vestuarios.length; i++) {
         if (
           this.vestuarios[i].selected == true &&
-          this.vestuarios[i].id != id
+          this.vestuarios[i]._id != id
         ) {
           this.vestuarios[i].selected = false;
         }
         if (
           this.vestuarios[i].selected == false &&
-          this.vestuarios[i].id == id
+          this.vestuarios[i]._id == id
         ) {
           this.vestuarios[i].selected = true;
           this.selectedVestuario = this.vestuarios[i];
@@ -290,8 +330,7 @@ export default {
         }
       }
     },
-    submitNewRequest() {
-      console.log(this.extras);
+    async submitNewRequest() {
       if (!this.menus.some(menu => menu.selected == true)) {
         //this.selectedMenu=this.menus.filter(menu=> menu.selected==true)
 
@@ -322,8 +361,28 @@ export default {
           icon: "error"
         });
       } else {
+        const response = await axios.post(this.url + "/", {
+          userId: localStorage.getItem("userLoggedIn"),
+          serviceName: this.selectedService.name,
+          menuName: this.selectedMenu.name,
+          date: this.datePicker,
+          time: this.timePicker,
+          vestuario: this.selectedVestuario.name,
+          extras: this.extras,
+          local: this.local,
+          budget: 0,
+          state: 1
+        });
 
-        this.$store.commit("ADD_REQUEST", {
+        if (response.data.error) {
+          console.log(response.data.error);
+          Swal({
+            type: "error",
+            title: "Ocorreu um erro, tente mais tarde"
+          });
+        }
+          /*   
+         this.$store.commit("ADD_REQUEST", {
           id: this.$store.getters.getReqLastId,
           userId: this.$store.getters.getLoggedUser.id,
           userName: this.$store.getters.getLoggedUser.username,
@@ -336,9 +395,10 @@ export default {
           local: this.local,
           budget: 0,
           state: 1
-        });
+        }); */
 
-        this.$store.commit("UPDATENOTIFICATION", {
+          /* 
+         this.$store.commit("UPDATENOTIFICATION", {
           id: this.$store.getters.getNotificationLastId,
           userId: this.$store.getters.getLoggedUser.id,
           userName: this.$store.getters.getLoggedUser.username,
@@ -346,55 +406,88 @@ export default {
           serviceName: this.selectedService.name,
           menuName: this.selectedMenu.name,
           new: true
-        });
+        })  */
+          
+          
+      
 
-  if(this.loggedUser.rewards.achievements[0].available==true){
-    this.loggedUser.rewards.achievements[0].progress=100;
-    this.loggedUser.points=this.loggedUser.points+this.loggedUser.rewards.achievements[0].points
-    this.loggedUser.rewards.achievements[0].available=false;
-    console.log(this.loggedUser)
-  
-    this.$store.state.loggedUser= this.loggedUser;
+      
 
-    for(let i=0;i<this.users;i++){
-      if(this.loggedUser.id==this.users[i].id)
-      {
-        this.users[i]=this.loggedUser;
-      }
-    }
-    this.$store.state.users=this.users;
-    console.log(this.users);
-  }
-  if (this.loggedUser.rewards.achievements[3].available == true && this.loggedUser.rewards.achievements[3].progress != 100){
-              this.loggedUser.rewards.achievements[3].progress += 10;
-            }
-            
-            else if (this.loggedUser.rewards.achievements[3].available == true && this.loggedUser.rewards.achievements[3].progress == 100) {
-              
-              this.loggedUser.points =
-                this.loggedUser.points +
-                this.loggedUser.rewards.achievements[3].points;
-              this.loggedUser.rewards.achievements[3].available = false;
-              console.log(this.loggedUser);
+          
+           if (this.loggedUser.rewards.acheivements[0].available == true) {
+            this.loggedUser.rewards.acheivements[0].progress = 100;
+            this.loggedUser.points =
+              this.loggedUser.points +
+              this.loggedUser.rewards.acheivements[0].points;
+            this.loggedUser.rewards.acheivements[0].available = false;
+            console.log(this.loggedUser);
 
-              this.$store.state.loggedUser = this.loggedUser;
+            this.$store.state.loggedUser = this.loggedUser;
 
-              for (let i = 0; i < this.users; i++) {
-                if (this.loggedUser.id == this.users[i].id) {
-                  this.users[i] = this.loggedUser;
-                }
+            for (let i = 0; i < this.users; i++) {
+              if (this.loggedUser.id == this.users[i].id) {
+                this.users[i] = this.loggedUser;
               }
-              this.$store.state.users = this.users;
-              console.log(this.users);
             }
+            this.$store.state.users = this.users;
+            console.log(this.users);
+          } 
+          console.log("ola2");
 
-   
-        Swal.fire({
-          title: "Pedido efetuado com sucesso!",
-          icon: "success"
-        }).then(this.$router.push({ name: "home" }));
-      }
+           if (
+            this.loggedUser.rewards.acheivements[3].available == true &&
+            this.loggedUser.rewards.acheivements[3].progress != 100
+          ) {
+            this.loggedUser.rewards.acheivements[3].progress += 10;
+          } else if (
+            this.loggedUser.rewards.acheivements[3].available == true &&
+            this.loggedUser.rewards.acheivements[3].progress == 100
+          ) {
+            this.loggedUser.points =
+              this.loggedUser.points +
+              this.loggedUser.rewards.acheivements[3].points;
+            this.loggedUser.rewards.acheivements[3].available = false;
+            console.log(this.loggedUser);
+
+            this.$store.state.loggedUser = this.loggedUser;
+
+            for (let i = 0; i < this.users; i++) {
+              if (this.loggedUser.id == this.users[i].id) {
+                this.users[i] = this.loggedUser;
+              }
+            }
+            this.$store.state.users = this.users;
+            console.log(this.users);
+          } 
+
+          Swal.fire({
+            title: "Pedido efetuado com sucesso!",
+            icon: "success"
+          }).then(this.$router.push({ name: "home" }));
+        }
+    },
+
+    getLoggedUser() {
+      console.log(this.users)
+      console.log(this.Loguser)
+      for (let i = 0; i < this.users.length; i++) {
+        console.log(this.loggedUser)
+            if (this.users[i]._id == this.Loguser) {
+              this.loggedUser = this.users[i];
+              console.log(this.loggedUser);
+              console.log("ola32");
+            }
+          }
+    /*   for (let i = 0; i < this.users.length; i++) {
+        if (this.users[i]._id == this.logUser) {
+          this.loggedUser = this.users[i];
+          this.acheivements = this.loggedUser.rewards.acheivements;
+          this.rewards = this.$store.getters.getRewards;
+          console.log(this.rewards);
+        }
+      } */
     }
+    
   }
 };
 </script>

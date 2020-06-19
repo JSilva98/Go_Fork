@@ -30,7 +30,7 @@
           <!-- <v-btn v-if="userRequest.state == 1" small color="error">Em Analise</v-btn> -->
           <v-btn
             v-if="userRequest.state == 2"
-            @click="payment(userRequest.id)"
+            @click="payment(userRequest._id)"
             small
             color="primary"
           >Pagar</v-btn>
@@ -53,7 +53,7 @@
                     <v-row>
                       <v-col cols="12">
                         <div class="text-left">
-                          <h2>Deixe o seu rating e o seu comentário.</h2>
+                          <h1>Deixe o seu rating e o seu comentário.</h1>
                           <h5>Poderá encontrar todos os rating e comentarios na página de Galeria</h5>
                         </div>
                       </v-col>
@@ -82,7 +82,7 @@
                   <v-btn
                     color="blue darken-1"
                     text
-                    @click="dialog = false, reviewOrder(userRequest.id)"
+                    @click="dialog = false, reviewOrder(userRequest._id)"
                   >Submeter Avaliação</v-btn>
                 </v-card-actions>
               </v-card>
@@ -171,6 +171,7 @@ h2 span {
 import NavbarSemLog from "@/components/NavBarSemLog.vue";
 import Footer from "@/components/footer.vue";
 import Swal from "sweetalert2";
+import axios from "axios";
 export default {
   components: {
     NavbarSemLog,
@@ -178,22 +179,48 @@ export default {
   },
   data: function() {
     return {
-      userRequests: this.$store.state.requests,
+      //userRequests: this.$store.state.requests,
       dialog: false,
       rating: 0,
       comment: "",
       users:null,
-      loggedUser:null
-
+      loggedUser:null,
+      Loguser: localStorage.getItem("userLoggedIn"),
+      requests: [],
+      userRequests: [],
+      url: "http://localhost:3000/reviews"
     };
   },
 
   created() {
-    this.userRequests = this.$store.getters.getUserRequests.filter(
+    /* this.userRequests = this.$store.getters.getUserRequests.filter(
       request => request.userId === this.$store.getters.getLoggedUser.id
     );
     this.users=this.$store.getters.getUsers;
-    this.loggedUser=this.$store.getters.getLoggedUser;
+    this.loggedUser=this.$store.getters.getLoggedUser; */
+
+    axios
+        .get("http://localhost:3000/users/")
+        .then(res => {
+          this.users = res.data;
+          this.getLoggedUser();
+          //console.log(this.users);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+
+    axios
+        .get("http://localhost:3000/requests/")
+        .then(res => {
+          this.requests = res.data;
+          this.getUserRequests();
+          //console.log(this.requests);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    
   },
 
   methods: {
@@ -220,46 +247,26 @@ export default {
         })
         .then(result => {
           if (result.value) {
-            if (this.loggedUser.rewards.achievements[1].available == true) {
-              this.loggedUser.rewards.achievements[1].progress = 100;
+            if (this.loggedUser.rewards.acheivements[1].available == true) {
+              this.loggedUser.rewards.acheivements[1].progress = 100;
               this.loggedUser.points =
                 this.loggedUser.points +
-                this.loggedUser.rewards.achievements[1].points;
-              this.loggedUser.rewards.achievements[1].available = false;
-              console.log(this.loggedUser);
+                this.loggedUser.rewards.acheivements[1].points;
+              this.loggedUser.rewards.acheivements[1].available = false;
+             }
 
-              this.$store.state.loggedUser = this.loggedUser;
-
-              for (let i = 0; i < this.users; i++) {
-                if (this.loggedUser.id == this.users[i].id) {
-                  this.users[i] = this.loggedUser;
-                }
-              }
-              this.$store.state.users = this.users;
-              console.log(this.users);
-            }
-
-            if (this.loggedUser.rewards.achievements[3].available == true && this.loggedUser.rewards.achievements[3].progress != 100){
-              this.loggedUser.rewards.achievements[3].progress += 10;
+            if (this.loggedUser.rewards.acheivements[3].available == true && this.loggedUser.rewards.acheivements[3].progress != 100){
+              this.loggedUser.rewards.acheivements[3].progress += 10;
             }
             
-            else if (this.loggedUser.rewards.achievements[3].available == true && this.loggedUser.rewards.achievements[3].progress == 100) {
+            else if (this.loggedUser.rewards.acheivements[3].available == true && this.loggedUser.rewards.acheivements[3].progress == 100) {
               
               this.loggedUser.points =
                 this.loggedUser.points +
-                this.loggedUser.rewards.achievements[2].points;
-              this.loggedUser.rewards.achievements[2].available = false;
-              console.log(this.loggedUser);
-
-              this.$store.state.loggedUser = this.loggedUser;
-
-              for (let i = 0; i < this.users; i++) {
-                if (this.loggedUser.id == this.users[i].id) {
-                  this.users[i] = this.loggedUser;
-                }
-              }
-              this.$store.state.users = this.users;
-              console.log(this.users);
+                this.loggedUser.rewards.acheivements[2].points;
+              this.loggedUser.rewards.acheivements[2].available = false;
+              //console.log(this.loggedUser);
+     
             }
             
             swalButtons.fire(
@@ -268,8 +275,19 @@ export default {
               "success"
             );
             for (let i = 0; i < this.userRequests.length; i++) {
-              if (this.userRequests[i].id === id) {
-                this.userRequests[i].state = 3;
+              if (this.userRequests[i]._id == id) {
+                let route ="http://localhost:3000/requests/" + this.requests[i]._id;
+                console.log("this.budget")
+                axios
+                  .put(route, {
+                    state: 3
+                  })
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
               }
             }
           } else if (
@@ -281,21 +299,41 @@ export default {
         });
     },
 
-    reviewOrder(id) {
-      this.$store.commit("ADDREVIEW", {
+    async reviewOrder(id) {
+      /* this.$store.commit("ADDREVIEW", {
         id: this.$store.getters.getReviewLastId,
         userId: this.$store.getters.getLoggedUser.id,
         userName: this.$store.getters.getLoggedUser.username,
         foto: this.$store.getters.getLoggedUser.foto,
         rating: this.rating,
         comment: this.comment
-      });
-      if (this.loggedUser.rewards.achievements[2].available == true) {
-              this.loggedUser.rewards.achievements[2].progress = 100;
+      }); */
+
+      const response = await axios
+        .post(this.url + "/", {
+          userId: this.loggedUser._id,
+          userName: this.loggedUser.username,
+          foto: this.loggedUser.foto,
+          rating: this.rating,
+          comment: this.comment,
+        })
+        //.then(window.location.reload());
+      if (response.data.error) {
+        console.log("deu erro");
+        console.log(response.data.error);
+        Swal({
+          type: "error",
+          title: "Ocorreu um erro, tente mais tarde"
+        });
+      }
+
+
+      if (this.loggedUser.rewards.acheivements[2].available == true) {
+              this.loggedUser.rewards.acheivements[2].progress = 100;
               this.loggedUser.points =
                 this.loggedUser.points +
-                this.loggedUser.rewards.achievements[2].points;
-              this.loggedUser.rewards.achievements[2].available = false;
+                this.loggedUser.rewards.acheivements[2].points;
+              this.loggedUser.rewards.acheivements[2].available = false;
               console.log(this.loggedUser);
 
               this.$store.state.loggedUser = this.loggedUser;
@@ -308,16 +346,16 @@ export default {
               this.$store.state.users = this.users;
               console.log(this.users);
             }
-            if (this.loggedUser.rewards.achievements[4].available == true && this.loggedUser.rewards.achievements[4].progress != 100){
-              this.loggedUser.rewards.achievements[4].progress += 10;
+            if (this.loggedUser.rewards.acheivements[4].available == true && this.loggedUser.rewards.acheivements[4].progress != 100){
+              this.loggedUser.rewards.acheivements[4].progress += 10;
             }
             
-            else if (this.loggedUser.rewards.achievements[4].available == true && this.loggedUser.rewards.achievements[4].progress == 100) {
+            else if (this.loggedUser.rewards.acheivements[4].available == true && this.loggedUser.rewards.acheivements[4].progress == 100) {
               
               this.loggedUser.points =
                 this.loggedUser.points +
-                this.loggedUser.rewards.achievements[4].points;
-              this.loggedUser.rewards.achievements[4].available = false;
+                this.loggedUser.rewards.acheivements[4].points;
+              this.loggedUser.rewards.acheivements[4].available = false;
               console.log(this.loggedUser);
 
               this.$store.state.loggedUser = this.loggedUser;
@@ -334,6 +372,26 @@ export default {
         request => request.id !== id
       );
       this.$store.state.requests = this.userRequests;
+    },
+
+    getLoggedUser() {
+      for (let i = 0; i < this.users.length; i++) {
+            if (this.users[i]._id == this.Loguser) {
+              this.loggedUser = this.users[i];    
+              console.log(this.loggedUser)
+              console.log("this.loggedUser")
+            }
+       }
+    },
+
+    getUserRequests(){
+      for (let i = 0; i < this.requests.length; i++) {
+
+         if(this.requests[i].userId == this.Loguser){
+           this.userRequests.push(this.requests[i])
+         } 
+    }
+    console.log(this.userRequests)
     }
   }
 };

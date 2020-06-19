@@ -12,7 +12,7 @@
                   
                   <v-img :aspect-ratio="16/9" :src="service.imgLink">
                   <router-link
-                    :to="{ name: 'menu', params: { serviceId: service.id } }"
+                    :to="{ name: 'menu', params: { serviceId: service._id } }"
                     tag="button"
                     :class="{ btn: true, 'btn-danger': true, 'btn-sm': true }"
                   >
@@ -65,7 +65,7 @@ h2 span {
 <script>
 import NavbarSemLog from "@/components/NavBarSemLog.vue";
 import Footer from "@/components/footer.vue";
-
+import axios from "axios";
 export default {
   name: "home",
   components: {
@@ -78,7 +78,15 @@ export default {
     };
   },
    created() {
-    this.services = this.$store.getters.getServices;}
+    axios
+        .get("http://localhost:3000/services/")
+        .then(res => {
+          this.services = res.data;
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    }
 
 };
 </script>

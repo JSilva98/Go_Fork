@@ -26,6 +26,29 @@ async function post(req, res) {
     }
 }
 
+async function put(req, res) {
+    try {
+        console.log("edited " + req.params.id )
+        Requests.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true },
+            (err, data) => {
+                if (err) {
+                    return res.status(400).send({ error: `Could not edit request: ${err}` })
+                }
+            }
+        )
+
+        return res.send("edited")
+    }
+
+    catch (err) {
+        return res.status(400).send({ error: `Could not edit request: ${err}` })
+
+    }
+}
+
 async function del(req, res){
     const _id = req.params.id
 
@@ -38,4 +61,4 @@ async function del(req, res){
 }
 
 
-module.exports = {get, post, del}
+module.exports = {get, post, del, put}

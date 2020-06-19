@@ -62,9 +62,9 @@ const routes = [
     component: novoPedido,
     beforeEnter: (to, from, next) => {
       if(localStorage.getItem("userLoggedIn").userLoggedIn !=-1){
-        next("/logIn")
+        next()
       }else{
-        next();
+        next("/errorPageInvalidUser");
       }
     }
   },
