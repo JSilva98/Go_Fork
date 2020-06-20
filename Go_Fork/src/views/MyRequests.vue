@@ -2,21 +2,21 @@
   <div class="about">
     <NavbarSemLog />
     <div class="Div">
-      <h2><span>Meus Pedidos</span></h2>
-       <p class="center">Nesta página poderá verificar o estado dos seus pedidos efetuados.</p>
+      <h2>
+        <span>Meus Pedidos</span>
+      </h2>
+      <p class="center">Nesta página poderá verificar o estado dos seus pedidos efetuados.</p>
     </div>
-<br>
+    <br />
     <table>
       <tr>
-        <th>ID do Pedido</th>
         <th>Nome do Serviço Pedido</th>
         <th>Nome do Menu Pedido</th>
         <th>Montante a Pagar</th>
         <th>Estado</th>
         <th>Ações</th>
       </tr>
-      <tr v-for="userRequest in userRequests" :key="userRequest.id">
-        <td>{{ userRequest.id }}</td>
+      <tr v-for="userRequest in userRequests" :key="userRequest._id">
         <td>{{ userRequest.serviceName }}</td>
         <td>{{ userRequest.menuName }}</td>
         <td>{{ userRequest.budget }}</td>
@@ -35,16 +35,19 @@
             color="primary"
           >Pagar</v-btn>
           <v-row justify="center">
-            <v-dialog v-model="dialog" persistent max-width="600px">
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  v-if="userRequest.state == 4"
-                  small
-                  color="success"
-                  v-on="on"
-                >Partilhe a sua Experiência</v-btn>
+            <h5
+              v-if="userRequest.state == 5"
+              small
+              color="error"
+            >Obrigado por partilhar a sua opinião</h5>
+             <v-dialog v-model="dialog" persistent max-width="600px"> 
+               <template v-slot:activator="{ on }" >
+                  <v-btn v-if="userRequest.state == 4" @click="getEventClickedReviewID(userRequest._id)" v-on= "on"  small color="success">Partilhe a sua Experiência</v-btn>
+                
               </template>
-              <v-card>
+              <!-- <v-btn v-if="userRequest.state == 4" small color="success">Partilhe a sua Experiência</v-btn> -->
+
+               <v-card>
                 <v-card-title>
                   <span class="headline">Review</span>
                 </v-card-title>
@@ -82,11 +85,12 @@
                   <v-btn
                     color="blue darken-1"
                     text
-                    @click="dialog = false, reviewOrder(userRequest._id)"
+                    @click="dialog = false, reviewOrder(eventClickedReviewID)"
                   >Submeter Avaliação</v-btn>
                 </v-card-actions>
-              </v-card>
-            </v-dialog>
+              </v-card> -->
+            </v-dialog> 
+          
           </v-row>
         </td>
       </tr>
@@ -114,7 +118,7 @@ tr:nth-child(even) {
 }
 
 th {
-  background-color: #F24B44;
+  background-color: #f24b44;
   color: white;
 }
 
@@ -123,8 +127,6 @@ th {
   align-items: center;
   justify-content: center;
 }
-
-
 
 .padding {
   padding-left: 5%;
@@ -154,16 +156,16 @@ footer {
 }
 
 h2 {
-   width: 100%; 
-   text-align: center; 
-   border-bottom: 1px solid #000; 
-   line-height: 0.1em;
-   margin-top: 25px; 
-} 
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #000;
+  line-height: 0.1em;
+  margin-top: 25px;
+}
 
-h2 span { 
-    background:#fafafa; 
-    padding:0 10px; 
+h2 span {
+  background: #fafafa;
+  padding: 0 10px;
 }
 </style>
 
@@ -183,12 +185,13 @@ export default {
       dialog: false,
       rating: 0,
       comment: "",
-      users:null,
-      loggedUser:null,
+      users: null,
+      loggedUser: null,
       Loguser: localStorage.getItem("userLoggedIn"),
       requests: [],
       userRequests: [],
-      url: "http://localhost:3000/reviews"
+      url: "http://localhost:3000/reviews",
+      eventClickedReviewID: ""
     };
   },
 
@@ -200,27 +203,26 @@ export default {
     this.loggedUser=this.$store.getters.getLoggedUser; */
 
     axios
-        .get("http://localhost:3000/users/")
-        .then(res => {
-          this.users = res.data;
-          this.getLoggedUser();
-          //console.log(this.users);
-        })
-        .catch(error => {
-          console.log(error);
-        })
+      .get("http://localhost:3000/users/")
+      .then(res => {
+        this.users = res.data;
+        this.getLoggedUser();
+        //console.log(this.users);
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
     axios
-        .get("http://localhost:3000/requests/")
-        .then(res => {
-          this.requests = res.data;
-          this.getUserRequests();
-          //console.log(this.requests);
-        })
-        .catch(error => {
-          console.log(error);
-        })
-    
+      .get("http://localhost:3000/requests/")
+      .then(res => {
+        this.requests = res.data;
+        this.getUserRequests();
+        //console.log(this.requests);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   },
 
   methods: {
@@ -253,22 +255,24 @@ export default {
                 this.loggedUser.points +
                 this.loggedUser.rewards.acheivements[1].points;
               this.loggedUser.rewards.acheivements[1].available = false;
-             }
-
-            if (this.loggedUser.rewards.acheivements[3].available == true && this.loggedUser.rewards.acheivements[3].progress != 100){
-              this.loggedUser.rewards.acheivements[3].progress += 10;
             }
-            
-            else if (this.loggedUser.rewards.acheivements[3].available == true && this.loggedUser.rewards.acheivements[3].progress == 100) {
-              
+
+            if (
+              this.loggedUser.rewards.acheivements[3].available == true &&
+              this.loggedUser.rewards.acheivements[3].progress != 100
+            ) {
+              this.loggedUser.rewards.acheivements[3].progress += 10;
+            } else if (
+              this.loggedUser.rewards.acheivements[3].available == true &&
+              this.loggedUser.rewards.acheivements[3].progress == 100
+            ) {
               this.loggedUser.points =
                 this.loggedUser.points +
                 this.loggedUser.rewards.acheivements[2].points;
               this.loggedUser.rewards.acheivements[2].available = false;
               //console.log(this.loggedUser);
-     
             }
-            
+
             swalButtons.fire(
               "Pagamamento realizado com sucesso",
               "",
@@ -276,8 +280,9 @@ export default {
             );
             for (let i = 0; i < this.userRequests.length; i++) {
               if (this.userRequests[i]._id == id) {
-                let route ="http://localhost:3000/requests/" + this.requests[i]._id;
-                console.log("this.budget")
+                let route =
+                  "http://localhost:3000/requests/" + this.requests[i]._id;
+                console.log("this.budget");
                 axios
                   .put(route, {
                     state: 3
@@ -309,15 +314,14 @@ export default {
         comment: this.comment
       }); */
 
-      const response = await axios
-        .post(this.url + "/", {
-          userId: this.loggedUser._id,
-          userName: this.loggedUser.username,
-          foto: this.loggedUser.foto,
-          rating: this.rating,
-          comment: this.comment,
-        })
-        //.then(window.location.reload());
+      const response = await axios.post(this.url + "/", {
+        userId: this.loggedUser._id,
+        userName: this.loggedUser.username,
+        foto: this.loggedUser.foto,
+        rating: this.rating,
+        comment: this.comment
+      });
+      //.then(window.location.reload());
       if (response.data.error) {
         console.log("deu erro");
         console.log(response.data.error);
@@ -326,72 +330,82 @@ export default {
           title: "Ocorreu um erro, tente mais tarde"
         });
       }
-
+      console.log(id);
+     
+       for (let i = 0; i < this.userRequests.length; i++) {
+              if (this.userRequests[i]._id == id) {
+                let route ="http://localhost:3000/requests/" + this.userRequests[i]._id;
+                axios
+                  .put(route, {
+                    state: 5
+                  })
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
+              }
+            } 
 
       if (this.loggedUser.rewards.acheivements[2].available == true) {
-              this.loggedUser.rewards.acheivements[2].progress = 100;
-              this.loggedUser.points =
-                this.loggedUser.points +
-                this.loggedUser.rewards.acheivements[2].points;
-              this.loggedUser.rewards.acheivements[2].available = false;
-              console.log(this.loggedUser);
+        this.loggedUser.rewards.acheivements[2].progress = 100;
+        this.loggedUser.points =
+          this.loggedUser.points +
+          this.loggedUser.rewards.acheivements[2].points;
+        this.loggedUser.rewards.acheivements[2].available = false;
+        console.log(this.loggedUser);
 
-              this.$store.state.loggedUser = this.loggedUser;
+        for (let i = 0; i < this.users; i++) {
+          if (this.loggedUser.id == this.users[i].id) {
+            this.users[i] = this.loggedUser;
+          }
+        }
+      }
+      if (
+        this.loggedUser.rewards.acheivements[4].available == true &&
+        this.loggedUser.rewards.acheivements[4].progress != 100
+      ) {
+        this.loggedUser.rewards.acheivements[4].progress += 10;
+      } else if (
+        this.loggedUser.rewards.acheivements[4].available == true &&
+        this.loggedUser.rewards.acheivements[4].progress == 100
+      ) {
+        this.loggedUser.points =
+          this.loggedUser.points +
+          this.loggedUser.rewards.acheivements[4].points;
+        this.loggedUser.rewards.acheivements[4].available = false;
+        console.log(this.loggedUser);
 
-              for (let i = 0; i < this.users; i++) {
-                if (this.loggedUser.id == this.users[i].id) {
-                  this.users[i] = this.loggedUser;
-                }
-              }
-              this.$store.state.users = this.users;
-              console.log(this.users);
-            }
-            if (this.loggedUser.rewards.acheivements[4].available == true && this.loggedUser.rewards.acheivements[4].progress != 100){
-              this.loggedUser.rewards.acheivements[4].progress += 10;
-            }
-            
-            else if (this.loggedUser.rewards.acheivements[4].available == true && this.loggedUser.rewards.acheivements[4].progress == 100) {
-              
-              this.loggedUser.points =
-                this.loggedUser.points +
-                this.loggedUser.rewards.acheivements[4].points;
-              this.loggedUser.rewards.acheivements[4].available = false;
-              console.log(this.loggedUser);
-
-              this.$store.state.loggedUser = this.loggedUser;
-
-              for (let i = 0; i < this.users; i++) {
-                if (this.loggedUser.id == this.users[i].id) {
-                  this.users[i] = this.loggedUser;
-                }
-              }
-              this.$store.state.users = this.users;
-              console.log(this.users);
-            }
-      this.userRequests = this.userRequests.filter(
-        request => request.id !== id
-      );
-      this.$store.state.requests = this.userRequests;
+        for (let i = 0; i < this.users; i++) {
+          if (this.loggedUser.id == this.users[i].id) {
+            this.users[i] = this.loggedUser;
+          }
+        }
+      }
     },
 
     getLoggedUser() {
       for (let i = 0; i < this.users.length; i++) {
-            if (this.users[i]._id == this.Loguser) {
-              this.loggedUser = this.users[i];    
-              console.log(this.loggedUser)
-              console.log("this.loggedUser")
-            }
-       }
+        if (this.users[i]._id == this.Loguser) {
+          this.loggedUser = this.users[i];
+          console.log(this.loggedUser);
+          console.log("this.loggedUser");
+        }
+      }
     },
 
-    getUserRequests(){
+    getUserRequests() {
       for (let i = 0; i < this.requests.length; i++) {
+        if (this.requests[i].userId == this.Loguser) {
+          this.userRequests.push(this.requests[i]);
+        }
+      }
+      console.log(this.userRequests);
+    },
 
-         if(this.requests[i].userId == this.Loguser){
-           this.userRequests.push(this.requests[i])
-         } 
-    }
-    console.log(this.userRequests)
+    getEventClickedReviewID(id){
+      this.eventClickedReviewID = id
     }
   }
 };
