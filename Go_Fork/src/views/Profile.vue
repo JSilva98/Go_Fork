@@ -211,8 +211,8 @@ export default {
       editFoto: "",
       editEmail: "",
       editPassword: "",
-      acheivements: null,
-      rewards: null,
+      acheivements: [],
+      rewards: [],
       value: 0,
       bufferValue: 100
     };
@@ -232,6 +232,8 @@ export default {
       .then(res => {
         this.users = res.data;
         this.getLoggedUser();
+        console.log(this.rewards)
+        console.log(this.acheivements)
       
       })
       .catch(error => {
@@ -249,26 +251,66 @@ export default {
   methods: {
         editUser() {
       for (let i = 0; i < this.users.length; i++) {
-        if (this.loggedUser.id === this.users[i].id) {
+        if (this.loggedUser._id == this.users[i]._id) {
           if (this.editUsername == "") {
             this.editUsername = this.loggedUser.username;
           } else {
-            this.users[i].username = this.editUsername;
+            let route ="http://localhost:3000/users/" + this.loggedUser._id
+                axios
+                  .put(route, {
+                    username: this.editUsername
+                  })
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
           }
           if (this.editFoto == "") {
             this.editFoto = this.loggedUser.foto;
           } else {
-            this.users[i].foto = this.editFoto;
+           let route ="http://localhost:3000/users/" + this.loggedUser._id
+                axios
+                  .put(route, {
+                    foto: this.editFoto
+                  })
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
           }
           if (this.editEmail == "") {
             this.editEmail = this.loggedUser.email;
           } else {
-            this.users[i].email = this.editEmail;
+            let route ="http://localhost:3000/users/" + this.loggedUser._id
+                axios
+                  .put(route, {
+                    email: this.editEmail
+                  })
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
           }
           if (this.editPassword == "") {
             this.editPassword = this.loggedUser.password;
           } else {
-            this.users[i].password = this.editPassword;
+            let route ="http://localhost:3000/users/" + this.loggedUser._id
+                axios
+                  .put(route, {
+                    password: this.editPassword
+                  })
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
           }
         }
       }

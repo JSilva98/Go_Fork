@@ -23,6 +23,7 @@ async function register(req, res) {
         username: req.body.username,
         password: req.body.password,
         foto: "https://i.imgur.com/6NIOn6z.jpg", 
+        points: 0,
         rewards:{
             requestServiceForFree: false,
             get20EurosCupon: false,

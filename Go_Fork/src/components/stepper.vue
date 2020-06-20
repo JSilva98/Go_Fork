@@ -422,15 +422,8 @@ export default {
             this.loggedUser.rewards.acheivements[0].available = false;
             console.log(this.loggedUser);
 
-            this.$store.state.loggedUser = this.loggedUser;
+           
 
-            for (let i = 0; i < this.users; i++) {
-              if (this.loggedUser.id == this.users[i].id) {
-                this.users[i] = this.loggedUser;
-              }
-            }
-            this.$store.state.users = this.users;
-            console.log(this.users);
           } 
           console.log("ola2");
 
@@ -449,7 +442,7 @@ export default {
             this.loggedUser.rewards.acheivements[3].available = false;
             console.log(this.loggedUser);
 
-            this.$store.state.loggedUser = this.loggedUser;
+       
 
             for (let i = 0; i < this.users; i++) {
               if (this.loggedUser.id == this.users[i].id) {
@@ -478,14 +471,6 @@ export default {
               console.log("ola32");
             }
           }
-    /*   for (let i = 0; i < this.users.length; i++) {
-        if (this.users[i]._id == this.logUser) {
-          this.loggedUser = this.users[i];
-          this.acheivements = this.loggedUser.rewards.acheivements;
-          this.rewards = this.$store.getters.getRewards;
-          console.log(this.rewards);
-        }
-      } */
     }
     
   }
