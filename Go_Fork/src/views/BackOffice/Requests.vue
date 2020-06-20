@@ -29,7 +29,7 @@
             </v-list-item-content>
             <v-card-text>
               Informação do Cliente:
-              <div class="subheading">Utilizador: {{request.userId}}</div>
+              <div class="subheading">Utilizador: {{request.username}}</div>
               <div class="subheading" v-if="requests.local !== '' ">Local: {{request.local}}</div>
             </v-card-text>
             <v-row>

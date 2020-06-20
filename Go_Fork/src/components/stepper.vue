@@ -363,6 +363,7 @@ export default {
       } else {
         const response = await axios.post(this.url + "/", {
           userId: localStorage.getItem("userLoggedIn"),
+          username: this.loggedUser.username,
           serviceName: this.selectedService.name,
           menuName: this.selectedMenu.name,
           date: this.datePicker,

@@ -96,8 +96,8 @@
     <br>
     <v-row class="justify-center">
       Total de Pontos Adquiridos: 
-      <h4 v-for="user in users" v-bind:key="user._id">
-        <span>{{user.points}}</span>
+      <h4>
+        <span>{{this.points}}</span>
       </h4>
     </v-row>
     <br />
@@ -211,7 +211,6 @@ export default {
   data: function() {
     return {
       loggedUser: {},
-      points: this.$store.state.loggedUser.points,
       users: null,
       logUser: localStorage.getItem("userLoggedIn"),
       editUsername: "",
@@ -221,7 +220,8 @@ export default {
       acheivements: [],
       rewards: [],
       value: 0,
-      bufferValue: 100
+      bufferValue: 100,
+      points: 0
     };
   },
   computed: {
@@ -326,7 +326,8 @@ export default {
         if (this.users[i]._id == this.logUser) {
           this.loggedUser = this.users[i];
           this.acheivements = this.loggedUser.rewards.acheivements;
-          this.rewards = this.loggedUser.rewards
+          this.rewards = this.loggedUser.rewards,
+          this.points = this.loggedUser.points
           console.log(this.loggedUser);
         }
       }
