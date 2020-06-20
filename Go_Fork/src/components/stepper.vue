@@ -232,12 +232,16 @@ export default {
       users: null,
       loggedUser: null,
       Loguser: localStorage.getItem("userLoggedIn"),
-      url: "http://localhost:3000/requests/"
+      url: "http://localhost:3000/requests/",
+      tempRewards: [],
+      tempPoints1: 0,
+      tempPoints2: 0,
+ 
     };
   },
   created() {
-    console.log(this.Loguser)
-      axios
+    console.log(this.Loguser);
+    axios
       .get("http://localhost:3000/services/")
       .then(res => {
         this.services = res.data;
@@ -245,44 +249,40 @@ export default {
       })
       .catch(error => {
         console.log(error);
+      });
+
+    axios
+      .get("http://localhost:3000/menus/")
+      .then(res => {
+        this.menus = res.data;
+        this.allMenusStore = res.data;
+        console.log(this.menus);
       })
-  
-      axios
-        .get("http://localhost:3000/menus/")
-        .then(res => {
-          this.menus = res.data;
-          this.allMenusStore = res.data;
-          console.log(this.menus);
-        })
-        .catch(error => {
-          console.log(error);
-        })
+      .catch(error => {
+        console.log(error);
+      });
 
+    axios
+      .get("http://localhost:3000/clothing/")
+      .then(res => {
+        this.vestuarios = res.data;
+        console.log(this.vestuarios);
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
-      axios
-        .get("http://localhost:3000/clothing/")
-        .then(res => {
-          this.vestuarios = res.data;
-          console.log(this.vestuarios);
-        })
-        .catch(error => {
-          console.log(error);
-        })
-
-
-      axios
-        .get("http://localhost:3000/users/")
-        .then(res => {
-          this.users = res.data;
-          this.getLoggedUser();
-          console.log(this.users);
-        })
-        .catch(error => {
-          console.log(error);
-        })
-     
+    axios
+      .get("http://localhost:3000/users/")
+      .then(res => {
+        this.users = res.data;
+        this.getLoggedUser();
+        console.log(this.users);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   },
-
 
   methods: {
     setSelectedService(id) {
@@ -381,7 +381,7 @@ export default {
             title: "Ocorreu um erro, tente mais tarde"
           });
         }
-          /*   
+        /*   
          this.$store.commit("ADD_REQUEST", {
           id: this.$store.getters.getReqLastId,
           userId: this.$store.getters.getLoggedUser.id,
@@ -397,7 +397,7 @@ export default {
           state: 1
         }); */
 
-          /* 
+        /* 
          this.$store.commit("UPDATENOTIFICATION", {
           id: this.$store.getters.getNotificationLastId,
           userId: this.$store.getters.getLoggedUser.id,
@@ -407,72 +407,73 @@ export default {
           menuName: this.selectedMenu.name,
           new: true
         })  */
-          
-          
-      
 
-      
+        if (this.loggedUser.rewards.acheivements[0].available == true) {
+          this.tempPoints1 = this.loggedUser.points + this.loggedUser.rewards.acheivements[0].points;
+          this.tempRewards.acheivements[0].progress = 100
+          this.tempRewards.acheivements[0].available = false
 
-          
-           if (this.loggedUser.rewards.acheivements[0].available == true) {
-            this.loggedUser.rewards.acheivements[0].progress = 100;
-            this.loggedUser.points =
-              this.loggedUser.points +
-              this.loggedUser.rewards.acheivements[0].points;
-            this.loggedUser.rewards.acheivements[0].available = false;
-            console.log(this.loggedUser);
-
-           
-
-          } 
-          console.log("ola2");
-
-           if (
-            this.loggedUser.rewards.acheivements[3].available == true &&
-            this.loggedUser.rewards.acheivements[3].progress != 100
-          ) {
-            this.loggedUser.rewards.acheivements[3].progress += 10;
-          } else if (
-            this.loggedUser.rewards.acheivements[3].available == true &&
-            this.loggedUser.rewards.acheivements[3].progress == 100
-          ) {
-            this.loggedUser.points =
-              this.loggedUser.points +
-              this.loggedUser.rewards.acheivements[3].points;
-            this.loggedUser.rewards.acheivements[3].available = false;
-            console.log(this.loggedUser);
-
-       
-
-            for (let i = 0; i < this.users; i++) {
-              if (this.loggedUser.id == this.users[i].id) {
-                this.users[i] = this.loggedUser;
-              }
-            }
-            this.$store.state.users = this.users;
-            console.log(this.users);
-          } 
-
-          Swal.fire({
-            title: "Pedido efetuado com sucesso!",
-            icon: "success"
-          }).then(this.$router.push({ name: "home" }));
+             let route ="http://localhost:3000/users/" + this.loggedUser._id
+                axios
+                  .put(route, {
+                    points: this.tempPoints1,
+                    rewards: this.tempRewards
+                  })
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  }); 
+   /*        this.loggedUser.rewards.acheivements[0].progress = 100;
+          this.loggedUser.points = this.loggedUser.points + this.loggedUser.rewards.acheivements[0].points;
+          this.loggedUser.rewards.acheivements[0].available = false; */
+          console.log(this.loggedUser.points);
         }
+        console.log("ola2");
+
+        /* if (
+          this.loggedUser.rewards.acheivements[3].available == true &&
+          this.loggedUser.rewards.acheivements[3].progress != 100
+        ) {
+          this.loggedUser.rewards.acheivements[3].progress += 10;
+        } else if (
+          this.loggedUser.rewards.acheivements[3].available == true &&
+          this.loggedUser.rewards.acheivements[3].progress == 100
+        ) {
+          this.loggedUser.points =
+            this.loggedUser.points +
+            this.loggedUser.rewards.acheivements[3].points;
+          this.loggedUser.rewards.acheivements[3].available = false;
+          console.log(this.loggedUser);
+
+          for (let i = 0; i < this.users; i++) {
+            if (this.loggedUser.id == this.users[i].id) {
+              this.users[i] = this.loggedUser;
+            }
+          }
+        } */
+
+        Swal.fire({
+          title: "Pedido efetuado com sucesso!",
+          icon: "success"
+        }).then(this.$router.push({ name: "home" }));
+      }
     },
 
     getLoggedUser() {
-      console.log(this.users)
-      console.log(this.Loguser)
+      console.log(this.users);
+      console.log(this.Loguser);
       for (let i = 0; i < this.users.length; i++) {
-        console.log(this.loggedUser)
-            if (this.users[i]._id == this.Loguser) {
-              this.loggedUser = this.users[i];
-              console.log(this.loggedUser);
-              console.log("ola32");
-            }
-          }
+        console.log(this.loggedUser);
+        if (this.users[i]._id == this.Loguser) {
+          this.loggedUser = this.users[i];
+          this.tempRewards = this.loggedUser.rewards
+          console.log(this.loggedUser);
+          console.log("ola32");
+        }
+      }
     }
-    
   }
 };
 </script>

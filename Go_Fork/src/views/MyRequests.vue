@@ -191,7 +191,10 @@ export default {
       requests: [],
       userRequests: [],
       url: "http://localhost:3000/reviews",
-      eventClickedReviewID: ""
+      eventClickedReviewID: "",
+      tempPoints1: 0,
+      tempPoints2: 0,
+      tempRewards: [],
     };
   },
 
@@ -249,12 +252,47 @@ export default {
         })
         .then(result => {
           if (result.value) {
-            if (this.loggedUser.rewards.acheivements[1].available == true) {
-              this.loggedUser.rewards.acheivements[1].progress = 100;
-              this.loggedUser.points =
-                this.loggedUser.points +
-                this.loggedUser.rewards.acheivements[1].points;
-              this.loggedUser.rewards.acheivements[1].available = false;
+           
+
+            swalButtons.fire(
+              "Pagamamento realizado com sucesso",
+              "",
+              "success"
+            );
+            for (let i = 0; i < this.userRequests.length; i++) {
+              if (this.userRequests[i]._id == id) {
+                let route =
+                  "http://localhost:3000/requests/" + this.userRequests[i]._id;
+                console.log("this.budget");
+                axios
+                  .put(route, {
+                    state: 3
+                  })
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  });
+
+
+                   if (this.loggedUser.rewards.acheivements[1].available == true) {
+          this.tempPoints1 = this.loggedUser.points + this.loggedUser.rewards.acheivements[1].points;
+          this.tempRewards.acheivements[1].progress = 100
+          this.tempRewards.acheivements[1].available = false
+
+             let route ="http://localhost:3000/users/" + this.loggedUser._id
+                axios
+                  .put(route, {
+                    points: this.tempPoints1,
+                    rewards: this.tempRewards
+                  })
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  }); 
             }
 
             if (
@@ -272,27 +310,6 @@ export default {
               this.loggedUser.rewards.acheivements[2].available = false;
               //console.log(this.loggedUser);
             }
-
-            swalButtons.fire(
-              "Pagamamento realizado com sucesso",
-              "",
-              "success"
-            );
-            for (let i = 0; i < this.userRequests.length; i++) {
-              if (this.userRequests[i]._id == id) {
-                let route =
-                  "http://localhost:3000/requests/" + this.requests[i]._id;
-                console.log("this.budget");
-                axios
-                  .put(route, {
-                    state: 3
-                  })
-                  .then(res => {
-                    console.log(res);
-                  })
-                  .catch(error => {
-                    console.log(error);
-                  });
               }
             }
           } else if (
@@ -349,19 +366,24 @@ export default {
             } 
 
       if (this.loggedUser.rewards.acheivements[2].available == true) {
-        this.loggedUser.rewards.acheivements[2].progress = 100;
-        this.loggedUser.points =
-          this.loggedUser.points +
-          this.loggedUser.rewards.acheivements[2].points;
-        this.loggedUser.rewards.acheivements[2].available = false;
-        console.log(this.loggedUser);
+          this.tempPoints2 = this.loggedUser.points + this.loggedUser.rewards.acheivements[2].points;
+          this.tempRewards.acheivements[2].progress = 100
+          this.tempRewards.acheivements[2].available = false
 
-        for (let i = 0; i < this.users; i++) {
-          if (this.loggedUser.id == this.users[i].id) {
-            this.users[i] = this.loggedUser;
-          }
-        }
-      }
+             let route ="http://localhost:3000/users/" + this.loggedUser._id
+                axios
+                  .put(route, {
+                    points: this.tempPoints2,
+                    rewards: this.tempRewards
+                  })
+                  .then(res => {
+                    console.log(res);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  }); 
+            }
+      
       if (
         this.loggedUser.rewards.acheivements[4].available == true &&
         this.loggedUser.rewards.acheivements[4].progress != 100
@@ -389,8 +411,7 @@ export default {
       for (let i = 0; i < this.users.length; i++) {
         if (this.users[i]._id == this.Loguser) {
           this.loggedUser = this.users[i];
-          console.log(this.loggedUser);
-          console.log("this.loggedUser");
+          this.tempRewards = this.loggedUser.rewards
         }
       }
     },

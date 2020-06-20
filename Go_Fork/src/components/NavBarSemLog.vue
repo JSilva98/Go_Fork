@@ -21,7 +21,7 @@
           <v-btn text>Login</v-btn>
         </router-link>
         <v-menu offset-y v-if="userLoggedIn != -1 && type == 3">
-          <template v-slot:activator="{ on }" @click="checkNewNotifications=false">
+          <!-- <template v-slot:activator="{ on }" @click="checkNewNotifications=false">
             <v-btn text v-on="on">
               <span v-if="checkNewNotifications == true">
                 <v-icon color="primary">mdi-bell</v-icon>
@@ -30,7 +30,7 @@
                 <v-icon>mdi-bell</v-icon>
               </span>
             </v-btn>
-          </template>
+          </template> -->
 
           <v-list v-if="userLoggedIn != -1 && type == 3">
             <v-list-item v-for="notification in notifications" :key="notification.id">

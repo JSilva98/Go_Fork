@@ -25,8 +25,6 @@ async function register(req, res) {
         foto: "https://i.imgur.com/6NIOn6z.jpg", 
         points: 0,
         rewards:{
-            requestServiceForFree: false,
-            get20EurosCupon: false,
          acheivements: [
             {
               id: 0,
@@ -47,7 +45,7 @@ async function register(req, res) {
             {
               id: 2,
               tittle: "Primeira review",
-              desc: "Faça o seu primeiro pedido para receber 5 pontos!",
+              desc: "Faça a sua primeira avaliação para receber 5 pontos!",
               points: 5,
               available: true,
               progress: 0,
@@ -63,7 +61,7 @@ async function register(req, res) {
             {
               id: 4,
               tittle: "Fazer 10 reviews",
-              desc: "Faça o seu primeiro pedido para receber 35‬ pontos!",
+              desc: "Faça 10 avaliações para receber 35‬ pontos!",
               points: 35,
               available: true,
               progress: 0,

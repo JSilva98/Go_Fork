@@ -93,6 +93,13 @@
         <span>Conquistas</span>
       </h2>
     </v-row>
+    <br>
+    <v-row class="justify-center">
+      Total de Pontos Adquiridos: 
+      <h4 v-for="user in users" v-bind:key="user._id">
+        <span>{{user.points}}</span>
+      </h4>
+    </v-row>
     <br />
     <br />
     <!-- Achievements -->
@@ -123,15 +130,15 @@
     </v-row>
     <br />
     <br />
-    <v-row class="justify-center">
+  <!--   <v-row class="justify-center">
       <h2>
         <span>Recompensas</span>
       </h2>
       <br />
       <br />
-    </v-row>
+    </v-row> -->
     <!-- Recompensas -->
-    <v-row class="justify-center">
+    <!-- <v-row class="justify-center">
       <v-col v-for="reward in rewards" v-bind:key="reward.id" cols="12">
         <v-card class="mx-auto" width="600" height="150" outlined shaped>
           <v-list-item three-line>
@@ -155,7 +162,7 @@
           </v-card>
         </v-card>
       </v-col>
-    </v-row>
+    </v-row> -->
 
     <br />
     <br />
@@ -232,9 +239,7 @@ export default {
       .then(res => {
         this.users = res.data;
         this.getLoggedUser();
-        console.log(this.rewards)
-        console.log(this.acheivements)
-      
+    
       })
       .catch(error => {
         console.log(error);
@@ -244,7 +249,7 @@ export default {
     //this.rewards= this.loggedUser.rewards;
     
     for (let i = 0; i < this.rewards.length; i++) {
-      this.rewards[i].progress = (this.points * 100) / this.rewards[i].meta;
+      this.rewards.acheivements[i].progress = (this.points * 100) / this.rewards[i].meta;
     }
   },
 
@@ -321,8 +326,8 @@ export default {
         if (this.users[i]._id == this.logUser) {
           this.loggedUser = this.users[i];
           this.acheivements = this.loggedUser.rewards.acheivements;
-          this.rewards = this.$store.getters.getRewards;
-          console.log(this.rewards);
+          this.rewards = this.loggedUser.rewards
+          console.log(this.loggedUser);
         }
       }
     }
