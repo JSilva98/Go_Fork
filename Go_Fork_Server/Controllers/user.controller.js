@@ -1,6 +1,7 @@
 const User = require('../Models/user.model.js')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+let SALT_ROUNDS = 10
 
 async function get(req, res){
     const user = req.query
@@ -21,7 +22,7 @@ async function register(req, res) {
     let newUser = await new User({
         email: req.body.email,
         username: req.body.username,
-        password: req.body.password,
+        password: bcrypt.hashSync(req.body.password, SALT_ROUNDS),
         foto: "https://i.imgur.com/6NIOn6z.jpg", 
         points: 0,
         rewards:{
@@ -91,7 +92,15 @@ async function validate(req, res) {
             return res.status(403).send({ error: "User not found" })
         }
 
-        //const passwordValid = await bcrypt.compare(password, user.password)
+        const passwordValid = await bcrypt.compare(password, user.password)
+        
+        if (!passwordValid) {
+            console.log("invalid password")
+            return res.status(403).send({ error: "Password invalid" })
+        }
+        res.status(200).send({ Yey: "U got it", user, token: jwtSignUser(user) })
+
+       /*  const passwordValid = await bcrypt.compare(password, user.password)
         //const passwordValid = password.equals(user.password)
 
         if (password != user.password) {
@@ -100,7 +109,7 @@ async function validate(req, res) {
         } else {
             console.log("Logged in")
             return res.status(200).send({ Yey: "Done", user, token: jwtSignUser(user) })
-        }
+        } */
         
         
 

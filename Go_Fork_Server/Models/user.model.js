@@ -23,8 +23,6 @@ var userSchema = new mongoose.Schema({
         required: true
     },
     rewards:{
-        requestServiceForFree: { type: Boolean, required: true },
-        get20EurosCupon: { type: Boolean, required: true },
         acheivements: [{
             id: { type: Number, required: true },
             tittle: { type: String, required: true },
