@@ -162,13 +162,13 @@ export default {
       name: "",
       imgLink: "",
       services: null,
-      url:"http://localhost:3000/services"
+      url:"https://goforkapi.herokuapp.com/services"
     };
   },
 
   created() {
     axios
-      .get("http://localhost:3000/services/")
+      .get("https://goforkapi.herokuapp.com/services/")
       .then(res => {
         this.services = res.data;
         console.log(this.services);
@@ -237,7 +237,7 @@ export default {
             swalButtons.fire("Serviço removido com sucesso", "", "success");
             for (let i = 0; i < this.services.length; i++) {
               if (this.services[i]._id === id) {
-                let route = "http://localhost:3000/services/" + this.services[i]._id;
+                let route = "https://goforkapi.herokuapp.com/services/" + this.services[i]._id;
                 axios
                   .delete(route)
                   .then(res => {

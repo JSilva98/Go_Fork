@@ -105,7 +105,7 @@ export default {
 
 
     axios
-        .get("http://localhost:3000/menus")
+        .get("https://goforkapi.herokuapp.com/menus/")
         .then(res => {
           this.menusAll = res.data;
           this.getService()

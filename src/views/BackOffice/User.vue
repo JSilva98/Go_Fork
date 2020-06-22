@@ -164,7 +164,7 @@ export default {
 
   created() {
     axios
-      .get("http://localhost:3000/users")
+      .get("https://goforkapi.herokuapp.com/users/")
       .then(res => {
         this.users = res.data;
         this.filteredUsers = res.data;
@@ -203,7 +203,7 @@ export default {
             if (this.users[i]._id === id) {
             if (result.value) {
             swalButtons.fire("Utilizador removido com sucesso", "", "success");
-           let route = "http://localhost:3000/users/" + this.users[i]._id;
+           let route = "https://goforkapi.herokuapp.com/users/" + this.users[i]._id;
               axios
                 .delete(route)
                 .then(res => {
@@ -249,7 +249,7 @@ export default {
             swalButtons.fire("Admin removido com sucesso", "", "success");
             for (let i = 0; i < this.users.length; i++) {
               if (this.users[i]._id === id) {
-                let route ="http://localhost:3000/users/" + this.users[i]._id;
+                let route ="https://goforkapi.herokuapp.com/users/" + this.users[i]._id;
 
                 axios
                   .put(route, {
@@ -297,7 +297,7 @@ export default {
             swalButtons.fire("Admin adicionado com sucesso", "", "success");
             for (let i = 0; i < this.users.length; i++) {
               if (this.users[i]._id === id) {
-                 let route ="http://localhost:3000/users/" + this.users[i]._id;
+                 let route ="https://goforkapi.herokuapp.com/users/" + this.users[i]._id;
                 console.log(this.filteredUsers)
                 axios
                   .put(route, {

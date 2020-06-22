@@ -141,7 +141,7 @@ export default {
 
   created() {
     axios
-      .get("http://localhost:3000/requests/")
+      .get("https://goforkapi.herokuapp.com/requests/")
       .then(res => {
         this.requests = res.data;
         console.log(this.requests);
@@ -196,7 +196,7 @@ export default {
 
             for (let i = 0; i < this.requests.length; i++) {
               if (this.requests[i]._id == id) {
-               let route ="http://localhost:3000/requests/" + this.requests[i]._id;
+               let route ="https://goforkapi.herokuapp.com/requests/" + this.requests[i]._id;
                 console.log(this.budget)
                 axios
                   .put(route, {
@@ -247,7 +247,7 @@ export default {
             console.log(value)
              for (let i = 0; i < this.requests.length; i++) { 
               if (this.requests[i]._id === id) {
-                let route ="http://localhost:3000/requests/" + this.requests[i]._id;
+                let route ="https://goforkapi.herokuapp.com/requests/" + this.requests[i]._id;
                 console.log(this.budget)
                 axios
                   .put(route, {
@@ -298,7 +298,7 @@ export default {
             for (let i = 0; i < this.requests.length; i++) {
               if (this.requests[i]._id === id) {
                 let route =
-                  "http://localhost:3000/requests/" + this.requests[i]._id;
+                  "https://goforkapi.herokuapp.com/requests/" + this.requests[i]._id;
                 axios
                   .delete(route)
                   .then(res => {

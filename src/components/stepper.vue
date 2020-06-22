@@ -232,7 +232,7 @@ export default {
       users: null,
       loggedUser: null,
       Loguser: localStorage.getItem("userLoggedIn"),
-      url: "http://localhost:3000/requests/",
+      url: "https://goforkapi.herokuapp.com/requests",
       tempRewards: [],
       tempPoints1: 0,
       tempPoints2: 0,
@@ -242,7 +242,7 @@ export default {
   created() {
     console.log(this.Loguser);
     axios
-      .get("http://localhost:3000/services/")
+      .get("https://goforkapi.herokuapp.com/services/")
       .then(res => {
         this.services = res.data;
         console.log(this.services);
@@ -252,7 +252,7 @@ export default {
       });
 
     axios
-      .get("http://localhost:3000/menus/")
+      .get("https://goforkapi.herokuapp.com/menus/")
       .then(res => {
         this.menus = res.data;
         this.allMenusStore = res.data;
@@ -263,7 +263,7 @@ export default {
       });
 
     axios
-      .get("http://localhost:3000/clothing/")
+      .get("https://goforkapi.herokuapp.com/clothing/")
       .then(res => {
         this.vestuarios = res.data;
         console.log(this.vestuarios);
@@ -273,7 +273,7 @@ export default {
       });
 
     axios
-      .get("http://localhost:3000/users/")
+      .get("https://goforkapi.herokuapp.com/users/")
       .then(res => {
         this.users = res.data;
         this.getLoggedUser();
@@ -414,7 +414,7 @@ export default {
           this.tempRewards.acheivements[0].progress = 100
           this.tempRewards.acheivements[0].available = false
 
-             let route ="http://localhost:3000/users/" + this.loggedUser._id
+             let route ="https://goforkapi.herokuapp.com/users/" + this.loggedUser._id
                 axios
                   .put(route, {
                     points: this.tempPoints1,

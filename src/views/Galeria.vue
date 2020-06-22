@@ -101,7 +101,7 @@ export default {
  
 
     axios
-        .get("http://localhost:3000/reviews/")
+        .get("https://goforkapi.herokuapp.com/reviews/")
         .then(res => {
           this.reviews = res.data;
         })
@@ -111,7 +111,7 @@ export default {
 
 
     axios
-      .get("http://localhost:3000/users/")
+      .get("https://goforkapi.herokuapp.com/users/")
       .then(res => {
         this.users = res.data;
         this.getLoggedUser();
@@ -156,7 +156,7 @@ export default {
             swalButtons.fire("Review removido com sucesso", "", "success");
             for (let i = 0; i < this.reviews.length; i++) {
               if (this.reviews[i]._id == id) {
-                let route = "http://localhost:3000/reviews/" + this.reviews[i]._id;
+                let route = "https://goforkapi.herokuapp.com/reviews/" + this.reviews[i]._id;
                 axios
                   .delete(route)
                   .then(res => {

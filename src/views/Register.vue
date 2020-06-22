@@ -109,7 +109,7 @@ export default {
       users:null,
       emailCheck:true,
       valid: true,
-      url: "http://localhost:3000/users",
+      url: "https://goforkapi.herokuapp.com/users",
       
       emailRules: [
         v => !!v || 'E-mail é obrigatorio ',

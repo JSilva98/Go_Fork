@@ -260,7 +260,7 @@ export default {
           if (this.editUsername == "") {
             this.editUsername = this.loggedUser.username;
           } else {
-            let route ="http://localhost:3000/users/" + this.loggedUser._id
+            let route ="https://goforkapi.herokuapp.com/users/" + this.loggedUser._id
                 axios
                   .put(route, {
                     username: this.editUsername
@@ -275,7 +275,7 @@ export default {
           if (this.editFoto == "") {
             this.editFoto = this.loggedUser.foto;
           } else {
-           let route ="http://localhost:3000/users/" + this.loggedUser._id
+           let route ="https://goforkapi.herokuapp.com/users/" + this.loggedUser._id
                 axios
                   .put(route, {
                     foto: this.editFoto
@@ -290,7 +290,7 @@ export default {
           if (this.editEmail == "") {
             this.editEmail = this.loggedUser.email;
           } else {
-            let route ="http://localhost:3000/users/" + this.loggedUser._id
+            let route ="https://goforkapi.herokuapp.com/users/" + this.loggedUser._id
                 axios
                   .put(route, {
                     email: this.editEmail
@@ -305,7 +305,7 @@ export default {
           if (this.editPassword == "") {
             this.editPassword = this.loggedUser.password;
           } else {
-            let route ="http://localhost:3000/users/" + this.loggedUser._id
+            let route ="https://goforkapi.herokuapp.com/users/" + this.loggedUser._id
                 axios
                   .put(route, {
                     password: this.editPassword

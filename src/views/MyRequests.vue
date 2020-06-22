@@ -190,7 +190,7 @@ export default {
       Loguser: localStorage.getItem("userLoggedIn"),
       requests: [],
       userRequests: [],
-      url: "http://localhost:3000/reviews",
+      url: "https://goforkapi.herokuapp.com/reviews",
       eventClickedReviewID: "",
       tempPoints1: 0,
       tempPoints2: 0,
@@ -206,7 +206,7 @@ export default {
     this.loggedUser=this.$store.getters.getLoggedUser; */
 
     axios
-      .get("http://localhost:3000/users/")
+      .get("https://goforkapi.herokuapp.com/users/")
       .then(res => {
         this.users = res.data;
         this.getLoggedUser();
@@ -217,7 +217,7 @@ export default {
       });
 
     axios
-      .get("http://localhost:3000/requests/")
+      .get("https://goforkapi.herokuapp.com/requests/")
       .then(res => {
         this.requests = res.data;
         this.getUserRequests();
@@ -262,7 +262,7 @@ export default {
             for (let i = 0; i < this.userRequests.length; i++) {
               if (this.userRequests[i]._id == id) {
                 let route =
-                  "http://localhost:3000/requests/" + this.userRequests[i]._id;
+                  "https://goforkapi.herokuapp.com/requests/" + this.userRequests[i]._id;
                 console.log("this.budget");
                 axios
                   .put(route, {
@@ -281,7 +281,7 @@ export default {
           this.tempRewards.acheivements[1].progress = 100
           this.tempRewards.acheivements[1].available = false
 
-             let route ="http://localhost:3000/users/" + this.loggedUser._id
+             let route ="https://goforkapi.herokuapp.com/users/" + this.loggedUser._id
                 axios
                   .put(route, {
                     points: this.tempPoints1,
@@ -351,7 +351,7 @@ export default {
      
        for (let i = 0; i < this.userRequests.length; i++) {
               if (this.userRequests[i]._id == id) {
-                let route ="http://localhost:3000/requests/" + this.userRequests[i]._id;
+                let route ="https://goforkapi.herokuapp.com/requests/" + this.userRequests[i]._id;
                 axios
                   .put(route, {
                     state: 5
@@ -370,7 +370,7 @@ export default {
           this.tempRewards.acheivements[2].progress = 100
           this.tempRewards.acheivements[2].available = false
 
-             let route ="http://localhost:3000/users/" + this.loggedUser._id
+             let route ="https://goforkapi.herokuapp.com/users/" + this.loggedUser._id
                 axios
                   .put(route, {
                     points: this.tempPoints2,

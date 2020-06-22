@@ -188,13 +188,13 @@ export default {
       food: "",
       drink: "",
       menus: null,
-      url: "http://localhost:3000/menus"
+      url: "https://goforkapi.herokuapp.com/menus"
     };
   },
 
   created() {
     axios
-      .get("http://localhost:3000/menus")
+      .get("https://goforkapi.herokuapp.com/menus/")
       .then(res => {
         this.menus = res.data;
         console.log(this.menus);
@@ -204,7 +204,7 @@ export default {
       }),
 
       axios
-      .get("http://localhost:3000/services/")
+      .get("https://goforkapi.herokuapp.com/services/")
       .then(res => {
         this.services = res.data;
         console.log(this.services);
@@ -279,7 +279,7 @@ export default {
             swalButtons.fire("Menu removido com sucesso", "", "success");
             for (let i = 0; i < this.menus.length; i++) {
               if (this.menus[i]._id === id) {
-                let route = "http://localhost:3000/menus/" + this.menus[i]._id;
+                let route = "https://goforkapi.herokuapp.com/menus/" + this.menus[i]._id;
                 axios
                   .delete(route)
                   .then(res => {

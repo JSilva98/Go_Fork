@@ -69,7 +69,7 @@ export default {
       username: "",
       password: "",
 
-      url: "http://localhost:3000/users"
+      url: "https://goforkapi.herokuapp.com/users/"
     };
   },
   mounted() {
