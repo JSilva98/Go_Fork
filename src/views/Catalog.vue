@@ -79,7 +79,7 @@ export default {
   },
    created() {
     axios
-        .get("http://localhost:3000/services/")
+        .get("https://goforkapi.herokuapp.com/services/")
         .then(res => {
           this.services = res.data;
         })
