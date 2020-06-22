@@ -130,7 +130,7 @@ export default {
     );
     
     axios
-      .get("http://localhost:3000/users/")
+      .get("https://goforkapi.herokuapp.com/users/")
       .then(res => {
         this.users = res.data;
         this.getLoggedUser();
