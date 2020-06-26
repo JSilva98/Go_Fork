@@ -88,7 +88,7 @@
                     @click="dialog = false, reviewOrder(eventClickedReviewID)"
                   >Submeter Avaliação</v-btn>
                 </v-card-actions>
-              </v-card> -->
+              </v-card> 
             </v-dialog> 
           
           </v-row>
